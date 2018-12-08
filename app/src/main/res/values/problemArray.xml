@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="problem">
+    <item>你的生日</item>>
+    <item>你毕业的高中名字</item>>
+    <item>你的小名</item>>
+    </string-array>
+</resources>

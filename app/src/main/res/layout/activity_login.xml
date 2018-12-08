@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.LoginActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/baseColor"
+        android:textStyle="bold"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="70dp"
+        android:src="@drawable/logo"/>
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/user" />
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_user"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="输入你的学号/教师号"
+            android:digits="@string/rule_text"
+            android:shadowColor="@color/baseColor"
+            android:theme="@style/MyEditText"
+            />
+    </android.support.v7.widget.LinearLayoutCompat>
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/lock" />
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_password"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="输入你的密码"
+            android:digits="@string/rule_text"
+            android:shadowColor="@color/baseColor"
+            android:inputType="textPassword"
+            android:theme="@style/MyEditText"/>
+    </android.support.v7.widget.LinearLayoutCompat>
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+
+        <Button
+            android:id="@+id/btn_rigister"
+            android:layout_width="145dp"
+            android:layout_height="40dp"
+            android:layout_above="@+id/btn_refresh"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/btn_stroke"
+            android:text="注册帐号"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/baseColor"/>
+        <TextView
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/btn_login"
+            android:textSize="20dp"
+            android:layout_width="145dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_refresh"
+            android:layout_marginTop="5dp"
+            android:theme="@style/AppTheme.Button"
+            android:text="登录"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</android.support.v7.widget.LinearLayoutCompat>

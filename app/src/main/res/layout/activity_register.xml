@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.RegisterActivity"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/baseColor"
+        android:textStyle="bold"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    </android.support.v7.widget.Toolbar>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        />
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:text="用户名："
+            />
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_user"
+           android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:hint="10位以上的学号/教师号"
+            android:digits="@string/rule_text"
+            android:shadowColor="@color/baseColor"
+            android:theme="@style/MyEditText"
+            />
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
+    </android.support.v7.widget.LinearLayoutCompat>
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:text="密码："
+            />
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="6到16位密码，区分大小写"
+            android:digits="@string/rule_text"
+            android:shadowColor="@color/baseColor"
+            android:theme="@style/MyEditText"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    </android.support.v7.widget.LinearLayoutCompat>
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:text="密保问题："
+            />
+            <android.support.v7.widget.AppCompatSpinner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:entries="@array/problem"
+                android:gravity="center"
+                />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="match_parent" />
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/et_promblem"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:hint="必填"
+        android:digits="@string/rule_text"
+        android:shadowColor="@color/baseColor"
+        android:theme="@style/MyEditText"/>
+</android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+
+        <Button
+            android:id="@+id/btn_registerAndLogin"
+            android:textSize="20dp"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_refresh"
+            android:layout_marginTop="5dp"
+            android:theme="@style/AppTheme.Button"
+            android:text="注册并登录"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</android.support.v7.widget.LinearLayoutCompat>
