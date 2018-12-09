@@ -13,4 +13,9 @@
         <item name="colorButtonNormal">@color/baseColor</item>//按钮默认颜色
         <item name="colorControlHighlight">#FF8DE0FF</item>//按钮按下的水波纹改变颜色
     </style>
+    <style name="MySwitchTheme">
+        <item name="colorControlActivated">@color/baseColor</item>
+        <item name="colorSwitchThumbNormal">#FFF1F1F1</item>
+        <item name="android:colorForeground">#FF2F2F2F</item>
+    </style>
 </resources>

@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import term.rjb.x2l.lessoncheck.R;
+import term.rjb.x2l.lessoncheck.manager.ActivityManager;
 import term.rjb.x2l.lessoncheck.presenter.LoginPresenter;
 
 import cn.bmob.v3.Bmob;
@@ -27,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        ActivityManager.getAppManager().addActivity(this);
 
         loginPresenter = new LoginPresenter(this);
         Bmob.initialize(this, "fba4168e732413ce0d5404cf54a719db");
@@ -56,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action1:
-                //TODO 忘记密码跳转
+                //TODO 前端->忘记密码跳转(预选项)
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -68,14 +71,31 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_login:
-                    //TODO 登录窗口跳转
+
                     String username=user.getText().toString().trim();//账户
                     String passwords=password.getText().toString().trim();//密码
-                    boolean susscesRegister=false;//注册是否成功
+                    int susscesRegister=0;//注册是否成功
+
+                    //TODO 后端->查询数据库,返回职业,0不存在,1学生,2老师
                     loginPresenter.login(username,passwords);
+
+
+                    switch (susscesRegister)
+                    {
+                        case 0:
+
+                            break;
+                        case 1:
+                            //TODO 前端->学生窗口跳转
+                            ActivityManager.getAppManager().finishActivity();
+                            break;
+                        case 2:
+                            //TODO 前端->教师登录窗口跳转
+                            ActivityManager.getAppManager().finishActivity();
+                            break;
+                    }
                     break;
                 case R.id.btn_rigister:
-                    //TODO 注册窗口跳转
                     Intent intent =new Intent(LoginActivity.this, RegisterActivity.class);
                     startActivity(intent);
                     break;

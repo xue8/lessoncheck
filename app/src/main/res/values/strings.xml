@@ -2,4 +2,19 @@
     <string name="app_name">LessonCheck</string>
     <string name="rule_text">0123456789abcdefghijklmnopqrstuvwxyz
 ABCDEFGHIJKLMNOPQRSTUVWXYZ`¬!"£$%^*()~=#{}[];':,./?/*-_+&#060;&#062;&#064;&#038;</string>
+    <string name="login_input_number">输入你的学号/教师号</string>
+    <string name="login_input_password">输入你的密码</string>
+    <string name="login_btn_register">注册帐号</string>
+    <string name="login_btn_login">登录</string>
+    <string name="register_label_account">账户：</string>
+    <string name="register_label_password">密码：</string>
+    <string name="register_label_name">姓名：</string>
+    <string name="register_label_sex">性别：</string>
+    <string name="register_label_problem">密保问题：</string>
+    <string name="register_label_answers">密保答案：</string>
+    <string name="register_input_number">请输入10位以上的学/教师号</string>
+    <string name="register_input_password">6~16位英文字符 区分大小写</string>
+    <string name="register_hint_necessary">必填</string>
+    <string name="register_label_student">我是学生</string>
+    <string name="register_label_teacher">我是教师</string>
 </resources>

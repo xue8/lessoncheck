@@ -1,49 +1,78 @@
 package term.rjb.x2l.lessoncheck.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import term.rjb.x2l.lessoncheck.R;
+import term.rjb.x2l.lessoncheck.manager.ActivityManager;
 import term.rjb.x2l.lessoncheck.pojo.Student;
 import term.rjb.x2l.lessoncheck.presenter.RegisterPresenter;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-/**
- *
- */
 public class RegisterActivity extends AppCompatActivity {
+
     private Toolbar toolBar;
     private EditText password;
     private EditText user;
+    private EditText name;
+    private EditText answers;
+    private Spinner miBao;
+    private Spinner sex;
+   private SwitchCompat job;
+    private Map<String,Integer> mibaoMap;
     RegisterPresenter registerPresenter;
     Button register;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        ActivityManager.getAppManager().addActivity(this);
 
         registerPresenter = new RegisterPresenter(this);
-
+        miBao=findViewById(R.id.sp_mibao);
+        sex=findViewById(R.id.sp_sex);
         toolBar = this.findViewById(R.id.toolbar);
         toolBar.setTitle("注册");
         toolBar.setSubtitle("成为我们的一员");
         password=findViewById(R.id.et_password);
         register=findViewById(R.id.btn_registerAndLogin);
         register.setOnClickListener(onClickListener);
+        name=findViewById(R.id.et_name);
+        answers=findViewById(R.id.et_answers);
         user=findViewById(R.id.et_user);
+        job=findViewById(R.id.sw_job);
         setSupportActionBar(toolBar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         password.setFilters(new InputFilter[]{inputFilter});
+
+        mibaoMap=new HashMap<>();
+        mibaoMap.put("你的生日",0);
+        mibaoMap.put("你毕业的高中名字",1);
+        mibaoMap.put("你的小名",2);
+
     }
     //顶部后退按钮
     @Override
@@ -78,24 +107,52 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(RegisterActivity.this,"密码太短啦",Toast.LENGTH_SHORT).show();
             return;
         }
+        else if(answers.getText().length()<1)
+        {
+            Toast.makeText(RegisterActivity.this,"请输入密保答案",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        String username=user.getText().toString().trim();//账户
-        String passwords=password.getText().toString().trim();//密码
-        Student student = new Student();
+        String _username=user.getText().toString().trim();//账户
+        Log.d("测试", "registerAndLogin: 账户名"+_username);
+        String _passwords=password.getText().toString().trim();//密码
+        Log.d("测试", "registerAndLogin: 密码"+_passwords);
+        String _name=name.getText().toString().trim();//名字
+        Log.d("测试", "registerAndLogin: 名字"+_name);
+        String _answers=answers.getText().toString().trim();//密保答案
+        Log.d("测试", "registerAndLogin: 密保答案"+_answers);
+        Integer _mibaoProblem=mibaoMap.get(miBao.getSelectedItem().toString().trim());//密保问题
+        Log.d("测试", "registerAndLogin: 密保问题"+_mibaoProblem);
+        String _sex=sex.getSelectedItem().toString().trim();//性别
+        Log.d("测试", "registerAndLogin: 性别"+_sex);
+        Integer _isTeacher=(job.isChecked())?1:0;//是否是老师
+        Log.d("测试", "registerAndLogin: 是否是老师"+_isTeacher);
 
-        student.setNumber(username);
-        student.setPassword(passwords);
         boolean susscesRegister=false;//注册是否成功
 
-        registerPresenter.register(student);
 
-        //TODO 后端交互->注册数据库，判断是否以有用户名
-        //
-        //
+        //TODO 后端->注册数据库，判断是否以有用户名，然后把susscesRegister返回
+        //mibaoMap.get(_mibaoProblem)  把密保映射成int
+        //begin
+
+//        Student student = new Student();
+//        student.setNumber(_username);
+//        student.setPassword(_passwords);
+//        registerPresenter.register(student);
+
+
+        //end
 
         if(susscesRegister)
         {
-            //TODO 进入主界面
+            Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
+            intent.putExtra("user",_username);
+            intent.putExtra("name",_name);
+            intent.putExtra("isTeacher",_isTeacher);
+
+            //TODO 前端->进入主界面
+            ActivityManager.getAppManager().finishActivity(LoginActivity.class);
+            ActivityManager.getAppManager().finishActivity();
         }
         else
         {

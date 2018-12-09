@@ -21,71 +21,131 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         />
+
     <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
         >
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="20dp"
-            android:text="用户名："
+            android:textSize="20sp"
+            android:text="@string/register_label_account"
             />
         <android.support.design.widget.TextInputEditText
             android:id="@+id/et_user"
-           android:layout_width="220dp"
+           android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="10位以上的学号/教师号"
+            android:hint="@string/register_input_number"
             android:digits="@string/rule_text"
             android:shadowColor="@color/baseColor"
             android:theme="@style/MyEditText"
             />
-        <TextView
-            android:layout_width="20dp"
-            android:layout_height="match_parent" />
     </android.support.v7.widget.LinearLayoutCompat>
+
     <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
         >
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="20dp"
-            android:text="密码："
+            android:textSize="20sp"
+            android:text="@string/register_label_password"
             />
         <android.support.design.widget.TextInputEditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="6到16位密码，区分大小写"
+            android:hint="@string/register_input_password"
             android:digits="@string/rule_text"
             android:shadowColor="@color/baseColor"
-            android:theme="@style/MyEditText"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
+            android:theme="@style/MyEditText"
+            />
     </android.support.v7.widget.LinearLayoutCompat>
+
     <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
         >
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="20dp"
-            android:text="密保问题："
+            android:textSize="20sp"
+            android:text="@string/register_label_name"
+            />
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint=""
+            android:digits="@string/rule_text"
+            android:shadowColor="@color/baseColor"
+            android:theme="@style/MyEditText"
+            />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="@string/register_label_sex"
+            />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+
+            />
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/sp_sex"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:entries="@array/sex"
+            android:gravity="center"
+            />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="@string/register_label_problem"
+            />
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20sp"
             />
             <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/sp_mibao"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:entries="@array/problem"
@@ -94,21 +154,25 @@
     </android.support.v7.widget.LinearLayoutCompat>
 
     <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
         >
         <TextView
-            android:layout_width="80dp"
-            android:layout_height="match_parent" />
+           android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="@string/register_label_answers"
+            />
     <android.support.design.widget.TextInputEditText
-        android:id="@+id/et_promblem"
-        android:layout_width="200dp"
+        android:id="@+id/et_answers"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:hint="必填"
+        android:hint="@string/register_hint_necessary"
         android:digits="@string/rule_text"
         android:shadowColor="@color/baseColor"
         android:theme="@style/MyEditText"/>
@@ -120,12 +184,45 @@
         android:orientation="horizontal"
         android:layout_gravity="center"
         >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="@string/register_label_student"
+            />
+       <android.support.v7.widget.SwitchCompat
+           android:layout_width="60dp"
+           android:id="@+id/sw_job"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center_vertical"
+           android:layout_marginBottom="10dp"
+           android:layout_marginRight="20dp"
+           android:layout_marginLeft="20dp"
+           app:switchMinWidth="60dp"
+           android:theme="@style/MySwitchTheme"
+           android:layout_marginTop="10dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="@string/register_label_teacher"
+            />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
 
         <Button
             android:id="@+id/btn_registerAndLogin"
-            android:textSize="20dp"
-            android:layout_width="320dp"
-            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
             android:layout_above="@+id/btn_refresh"
             android:layout_marginTop="5dp"
             android:theme="@style/AppTheme.Button"
