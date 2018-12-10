@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,11 +12,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import cn.bmob.v3.BmobUser;
 import term.rjb.x2l.lessoncheck.R;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
+import term.rjb.x2l.lessoncheck.pojo.Lesson;
+import term.rjb.x2l.lessoncheck.pojo.User;
 import term.rjb.x2l.lessoncheck.presenter.LoginPresenter;
 
 import cn.bmob.v3.Bmob;
+import term.rjb.x2l.lessoncheck.presenter.TeacherPresenter;
 
 public class LoginActivity extends AppCompatActivity {
     private Toolbar toolBar;
@@ -24,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText password;
     private EditText user;
     LoginPresenter loginPresenter;
+    TeacherPresenter teacherPresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,13 +83,8 @@ public class LoginActivity extends AppCompatActivity {
                     int susscesRegister=0;//注册是否成功
 
                     //TODO 后端->查询数据库,返回职业,0不存在,1学生,2老师
-                    susscesRegister = loginPresenter.login(username,passwords);
+                     susscesRegister = loginPresenter.login(username, passwords);
 
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
 
                     switch (susscesRegister)
                     {
@@ -92,7 +93,6 @@ public class LoginActivity extends AppCompatActivity {
                             break;
                         case 1:
                             //TODO 前端->学生窗口跳转
-                            ActivityManager.getAppManager().finishActivity();
                             break;
                         case 2:
                             //TODO 前端->教师登录窗口跳转

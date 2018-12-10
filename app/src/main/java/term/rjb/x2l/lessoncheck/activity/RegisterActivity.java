@@ -143,7 +143,6 @@ public class RegisterActivity extends AppCompatActivity {
         user.setNumber(_username);
         user.setIsTeacher(_isTeacher);
 
-
         susscesRegister = registerPresenter.register(user);
 
         try {
