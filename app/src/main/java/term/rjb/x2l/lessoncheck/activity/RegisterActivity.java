@@ -3,6 +3,8 @@ package term.rjb.x2l.lessoncheck.activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 import term.rjb.x2l.lessoncheck.R;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
 import term.rjb.x2l.lessoncheck.pojo.Student;
+import term.rjb.x2l.lessoncheck.pojo.Teacher;
 import term.rjb.x2l.lessoncheck.presenter.RegisterPresenter;
 
 import java.io.UnsupportedEncodingException;
@@ -39,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText answers;
     private Spinner miBao;
     private Spinner sex;
-   private SwitchCompat job;
+    private SwitchCompat job;
     private Map<String,Integer> mibaoMap;
     RegisterPresenter registerPresenter;
     Button register;
@@ -129,7 +132,36 @@ public class RegisterActivity extends AppCompatActivity {
         Log.d("测试", "registerAndLogin: 是否是老师"+_isTeacher);
 
         boolean susscesRegister=false;//注册是否成功
+        Teacher teacher = new Teacher();
+        Student student = new Student();
 
+        teacher.setName(_name);
+        teacher.setPassword(_passwords);
+        teacher.setSecretAnswer(_answers);
+        teacher.setSecretId(_mibaoProblem);
+        teacher.setSex(_sex);
+        teacher.setTeacherNumber(_username);
+
+
+        student.setName(_name);
+        student.setPassword(_passwords);
+        student.setSecretAnswer(_answers);
+        student.setSecretId(_mibaoProblem);
+        student.setSex(_sex);
+        student.setNumber(_username);
+
+
+        if(_isTeacher == 1) {
+            susscesRegister = registerPresenter.teacherRegister(teacher);
+        }else{
+            susscesRegister = registerPresenter.studentRegister(student);
+        }
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //TODO 后端->注册数据库，判断是否以有用户名，然后把susscesRegister返回
         //mibaoMap.get(_mibaoProblem)  把密保映射成int
@@ -149,7 +181,6 @@ public class RegisterActivity extends AppCompatActivity {
             intent.putExtra("user",_username);
             intent.putExtra("name",_name);
             intent.putExtra("isTeacher",_isTeacher);
-
             //TODO 前端->进入主界面
             ActivityManager.getAppManager().finishActivity(LoginActivity.class);
             ActivityManager.getAppManager().finishActivity();

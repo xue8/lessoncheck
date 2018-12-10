@@ -2,53 +2,53 @@ package term.rjb.x2l.lessoncheck.pojo;
 
 import cn.bmob.v3.BmobObject;
 
-public class Student extends BmobObject {
+public class Teacher extends BmobObject {
     private int id;
-    private String number;
+    private String teacherNumber;
     private String name;
     private String password;
     private String sex;
     private int secretId;
     private String secretAnswer;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
     public int getId() {
         return id;
     }
 
-    public String getNumber() {
-        return number;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTeacherNumber() {
+        return teacherNumber;
+    }
+
+    public void setTeacherNumber(String teacherNumber) {
+        this.teacherNumber = teacherNumber;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPassword() {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getSex() {
         return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public int getSecretId() {
