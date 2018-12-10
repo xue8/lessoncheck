@@ -6,6 +6,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import term.rjb.x2l.lessoncheck.activity.LoginActivity;
+import term.rjb.x2l.lessoncheck.pojo.Student;
 
 public class LoginPresenter {
     private LoginActivity loginActivity;
@@ -16,16 +17,17 @@ public class LoginPresenter {
 
 //    登录
     public void login(String number, String password){
-        BmobUser userLogin = new BmobUser();
-        userLogin.setUsername(number.toString());
-        userLogin.setPassword(password);
-        userLogin.login(new SaveListener<BmobUser>() {
+        final Student student = new Student();
+        student.setUsername(number);
+        student.setPassword(password);
+        student.login(new SaveListener<Student>() {
             @Override
-            public void done(BmobUser bmobUser, BmobException e) {
+            public void done(Student bmobStudent, BmobException e) {
                 if(e==null){
-                    Toast.makeText(loginActivity,bmobUser.getUsername()+"登录成功",Toast.LENGTH_SHORT).show();
+                    Student student = BmobUser.getCurrentUser(Student.class);
+                    Toast.makeText(loginActivity,student.getUsername()+"登录成功",Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(loginActivity,"登录失败",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(loginActivity,"登录失败"+e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
         });

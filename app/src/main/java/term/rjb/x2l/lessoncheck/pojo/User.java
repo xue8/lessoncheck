@@ -2,12 +2,13 @@ package term.rjb.x2l.lessoncheck.pojo;
 
 import cn.bmob.v3.BmobUser;
 
-public class Teacher extends BmobUser {
+public class User extends BmobUser {
     private int id;
-    private String teacherNumber;
+    private String Number;
     private String name;
     private String sex;
     private int secretId;
+    private int isTeacher;
     private String secretAnswer;
 
     public int getId() {
@@ -18,12 +19,12 @@ public class Teacher extends BmobUser {
         this.id = id;
     }
 
-    public String getTeacherNumber() {
-        return teacherNumber;
+    public String getNumber() {
+        return Number;
     }
 
-    public void setTeacherNumber(String teacherNumber) {
-        this.teacherNumber = teacherNumber;
+    public void setNumber(String number) {
+        Number = number;
     }
 
     public String getName() {
@@ -48,6 +49,14 @@ public class Teacher extends BmobUser {
 
     public void setSecretId(int secretId) {
         this.secretId = secretId;
+    }
+
+    public int getIsTeacher() {
+        return isTeacher;
+    }
+
+    public void setIsTeacher(int isTeacher) {
+        this.isTeacher = isTeacher;
     }
 
     public String getSecretAnswer() {

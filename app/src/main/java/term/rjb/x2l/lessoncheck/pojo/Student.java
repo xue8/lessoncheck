@@ -1,12 +1,11 @@
 package term.rjb.x2l.lessoncheck.pojo;
 
-import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobUser;
 
-public class Student extends BmobObject {
+public class Student extends BmobUser {
     private int id;
-    private String number;
+    private String studentNumber;
     private String name;
-    private String password;
     private String sex;
     private int secretId;
     private String secretAnswer;
@@ -19,12 +18,12 @@ public class Student extends BmobObject {
         this.name = name;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public String getStudentNumber() {
+        return studentNumber;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setStudentNumber(String studentNumber) {
+        this.studentNumber = studentNumber;
     }
 
     public void setSex(String sex) {
@@ -35,17 +34,11 @@ public class Student extends BmobObject {
         return id;
     }
 
-    public String getNumber() {
-        return number;
-    }
 
     public String getName() {
         return name;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
     public String getSex() {
         return sex;

@@ -23,8 +23,7 @@ import android.widget.Toast;
 
 import term.rjb.x2l.lessoncheck.R;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
-import term.rjb.x2l.lessoncheck.pojo.Student;
-import term.rjb.x2l.lessoncheck.pojo.Teacher;
+import term.rjb.x2l.lessoncheck.pojo.User;
 import term.rjb.x2l.lessoncheck.presenter.RegisterPresenter;
 
 import java.io.UnsupportedEncodingException;
@@ -132,30 +131,20 @@ public class RegisterActivity extends AppCompatActivity {
         Log.d("测试", "registerAndLogin: 是否是老师"+_isTeacher);
 
         boolean susscesRegister=false;//注册是否成功
-        Teacher teacher = new Teacher();
-        Student student = new Student();
-
-        teacher.setName(_name);
-        teacher.setPassword(_passwords);
-        teacher.setSecretAnswer(_answers);
-        teacher.setSecretId(_mibaoProblem);
-        teacher.setSex(_sex);
-        teacher.setTeacherNumber(_username);
+        User user = new User();
+        
 
 
-        student.setName(_name);
-        student.setPassword(_passwords);
-        student.setSecretAnswer(_answers);
-        student.setSecretId(_mibaoProblem);
-        student.setSex(_sex);
-        student.setNumber(_username);
+        user.setName(_name);
+        user.setPassword(_passwords);
+        user.setSecretAnswer(_answers);
+        user.setSecretId(_mibaoProblem);
+        user.setSex(_sex);
+        user.setNumber(_username);
+        user.setIsTeacher(_isTeacher);
 
 
-        if(_isTeacher == 1) {
-            susscesRegister = registerPresenter.teacherRegister(teacher);
-        }else{
-            susscesRegister = registerPresenter.studentRegister(student);
-        }
+        susscesRegister = registerPresenter.register(user);
 
         try {
             Thread.sleep(500);
@@ -167,10 +156,10 @@ public class RegisterActivity extends AppCompatActivity {
         //mibaoMap.get(_mibaoProblem)  把密保映射成int
         //begin
 
-//        Student student = new Student();
-//        student.setNumber(_username);
-//        student.setPassword(_passwords);
-//        registerPresenter.register(student);
+//        user user = new user();
+//        user.setNumber(_username);
+//        user.setPassword(_passwords);
+//        registerPresenter.register(user);
 
 
         //end
