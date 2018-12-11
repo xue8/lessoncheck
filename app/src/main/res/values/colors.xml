@@ -6,4 +6,7 @@
     <color name="baseColor">#FF33B5E5</color>
     <!--<color name="baseColor">#FF00DDFF</color>-->
     <color name="white">#FFFFFFFF</color>
-</resources>
+    <color name="black">#000000</color>
+    <color name="hui">#3e3e3e</color>
+    <color name="danhui">#bebebe</color>
+    </resources>

@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import term.rjb.x2l.lessoncheck.R;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
@@ -48,12 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         rigister.setOnClickListener(onClickListener);
         login.setOnClickListener(onClickListener);
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = this.getMenuInflater();
-        inflater.inflate(R.menu.menu_toolbar, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -74,24 +70,29 @@ public class LoginActivity extends AppCompatActivity {
 
                     String username=user.getText().toString().trim();//账户
                     String passwords=password.getText().toString().trim();//密码
-                    int susscesRegister=0;//注册是否成功
+                    int successRegister=0;//注册是否成功
 
                     //TODO 后端->查询数据库,返回职业,0不存在,1学生,2老师
                     loginPresenter.login(username,passwords);
 
 
-                    switch (susscesRegister)
+                    switch (successRegister)
                     {
                         case 0:
-
+                            Toast.makeText(LoginActivity.this,"账户不存在！",Toast.LENGTH_SHORT).show();
                             break;
                         case 1:
                             //TODO 前端->学生窗口跳转
-                            ActivityManager.getAppManager().finishActivity();
+                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
                             break;
                         case 2:
-                            //TODO 前端->教师登录窗口跳转
-                            ActivityManager.getAppManager().finishActivity();
+                            Intent intent=new Intent(LoginActivity.this,TeacherMainActivity.class);
+                            // Intent intent=new Intent(RegisterActivity.this,StudentMainActivity.class);
+                            intent.putExtra("user",username);
+                            intent.putExtra("name",passwords);
+                            intent.putExtra("isTeacher",1);
+                            startActivity(intent);
+                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
                             break;
                     }
                     break;
@@ -102,4 +103,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        Log.d("LoginAc","退出");
+        super.onDestroy();
+    }
 }

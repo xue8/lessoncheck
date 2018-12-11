@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 
+import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ActivityManager {
-    private static Stack<Activity> activityStack;
+    private static List<Activity> activityList;
     private static ActivityManager instance;
     private PendingIntent restartIntent;
 
@@ -22,45 +24,44 @@ public class ActivityManager {
     }
 
     public void addActivity(Activity activity) {
-        if (activityStack == null) {
-            activityStack = new Stack<Activity>();
+        if (activityList == null) {
+            activityList = new CopyOnWriteArrayList<Activity>();
         }
-        activityStack.add(activity);
-    }
-
-    public Activity currentActivity() {
-        Activity activity = activityStack.lastElement();
-        return activity;
-    }
-
-    public void finishActivity() {
-        Activity activity = activityStack.lastElement();
-        finishActivity(activity);
+        activityList.add(activity);
     }
 
     public void finishActivity(Activity activity) {
         if (activity != null) {
-            activityStack.remove(activity);
+            activityList.remove(activity);
             activity.finish();
             activity = null;
         }
     }
 
     public void finishActivity(Class<?> cls) {
-        for (Activity activity : activityStack) {
+        for (Activity activity : activityList) {
             if (activity.getClass().equals(cls)) {
                 finishActivity(activity);
             }
         }
     }
 
-    public void finishAllActivity() {
-        for (int i = 0, size = activityStack.size(); i < size; i++) {
-            if (null != activityStack.get(i)) {
-                activityStack.get(i).finish();
+    public Activity getActivity(Class<?> cls){
+        for (Activity activity : activityList) {
+            if (activity.getClass().equals(cls)) {
+               return activity;
             }
         }
-        activityStack.clear();
+        return null;
+    }
+
+    public void finishAllActivity() {
+        for (int i = 0, size = activityList.size(); i < size; i++) {
+            if (null != activityList.get(i)) {
+                activityList.get(i).finish();
+            }
+        }
+        activityList.clear();
     }
 
     public void exitApp(Context context) {
