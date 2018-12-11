@@ -4,6 +4,7 @@ import cn.bmob.v3.BmobObject;
 
 public class Lesson extends BmobObject {
     private int id;
+    private int studentNum;
     private String lessonNumber;
     private String lessonName;
     private User teacher;
@@ -14,6 +15,14 @@ public class Lesson extends BmobObject {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getStudentNum() {
+        return studentNum;
+    }
+
+    public void setStudentNum(int studentNum) {
+        this.studentNum = studentNum;
     }
 
     public String getlessonNumber() {

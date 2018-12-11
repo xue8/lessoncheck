@@ -93,6 +93,8 @@ public class LoginActivity extends AppCompatActivity {
                             break;
                         case 1:
                             //TODO 前端->学生窗口跳转
+                            teacherPresenter = new TeacherPresenter(new TeacherActivity());
+                            teacherPresenter.updateStudentNum(1,"03799b33b5");
                             break;
                         case 2:
                             //TODO 前端->教师登录窗口跳转
