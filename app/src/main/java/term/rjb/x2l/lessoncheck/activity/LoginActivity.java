@@ -48,12 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         rigister.setOnClickListener(onClickListener);
         login.setOnClickListener(onClickListener);
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = this.getMenuInflater();
-        inflater.inflate(R.menu.menu_toolbar, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -87,11 +81,15 @@ public class LoginActivity extends AppCompatActivity {
                             break;
                         case 1:
                             //TODO 前端->学生窗口跳转
-                            ActivityManager.getAppManager().finishActivity();
                             break;
                         case 2:
                             //TODO 前端->教师登录窗口跳转
-                            ActivityManager.getAppManager().finishActivity();
+                            Intent intent=new Intent(LoginActivity.this,TeacherMainActivity.class);
+                            intent.putExtra("user",username);
+                            intent.putExtra("name",passwords);
+                            intent.putExtra("isTeacher",1);
+                            startActivity(intent);
+                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
                             break;
                     }
                     break;

@@ -128,7 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
         Integer _isTeacher=(job.isChecked())?1:0;//是否是老师
         Log.d("测试", "registerAndLogin: 是否是老师"+_isTeacher);
 
-        boolean susscesRegister=false;//注册是否成功
+        boolean susscesRegister=true;//注册是否成功
 
 
         //TODO 后端->注册数据库，判断是否以有用户名，然后把susscesRegister返回
@@ -145,14 +145,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(susscesRegister)
         {
-            Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
+            Intent intent=new Intent(RegisterActivity.this,TeacherMainActivity.class);
             intent.putExtra("user",_username);
             intent.putExtra("name",_name);
             intent.putExtra("isTeacher",_isTeacher);
-
-            //TODO 前端->进入主界面
+            startActivity(intent);
             ActivityManager.getAppManager().finishActivity(LoginActivity.class);
-            ActivityManager.getAppManager().finishActivity();
+            ActivityManager.getAppManager().finishActivity(RegisterActivity.this);
         }
         else
         {
