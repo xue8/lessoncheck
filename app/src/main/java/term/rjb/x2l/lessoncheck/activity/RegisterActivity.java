@@ -78,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            ActivityManager.getAppManager().finishActivity(RegisterActivity.this);
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -128,13 +128,13 @@ public class RegisterActivity extends AppCompatActivity {
         Integer _isTeacher=(job.isChecked())?1:0;//是否是老师
         Log.d("测试", "registerAndLogin: 是否是老师"+_isTeacher);
 
-        boolean successRegister=true;//注册是否成功
+        boolean susscesRegister=false;//注册是否成功
 
 
-        //TODO 后端->注册数据库，判断是否以有用户名，然后把successRegister返回
+        //TODO 后端->注册数据库，判断是否以有用户名，然后把susscesRegister返回
         //mibaoMap.get(_mibaoProblem)  把密保映射成int
         //begin
-//样例
+
 //        Student student = new Student();
 //        student.setNumber(_username);
 //        student.setPassword(_passwords);
@@ -143,16 +143,16 @@ public class RegisterActivity extends AppCompatActivity {
 
         //end
 
-        if(successRegister)
+        if(susscesRegister)
         {
-            Intent intent=new Intent(RegisterActivity.this,TeacherMainActivity.class);
-           // Intent intent=new Intent(RegisterActivity.this,StudentMainActivity.class);
+            Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
             intent.putExtra("user",_username);
             intent.putExtra("name",_name);
             intent.putExtra("isTeacher",_isTeacher);
-            startActivity(intent);
+
+            //TODO 前端->进入主界面
             ActivityManager.getAppManager().finishActivity(LoginActivity.class);
-            ActivityManager.getAppManager().finishActivity(RegisterActivity.this);
+            ActivityManager.getAppManager().finishActivity();
         }
         else
         {
@@ -184,9 +184,4 @@ public class RegisterActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void onDestroy() {
-        Log.d("RegisterAc","退出");
-        super.onDestroy();
-    }
 }
