@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/item_nav_menu_my_class"
+            android:icon="@drawable/_class"
+            android:title="我的课堂"/>
+        <item
+            android:id="@+id/item_nav_menu_delete_class"
+            android:icon="@drawable/delete"
+            android:title="删除课堂"/>
+        <item
+            android:id="@+id/item_nav_menu_quit"
+            android:icon="@drawable/quit"
+            android:title="退出"/>
+    </group>
+</menu>
