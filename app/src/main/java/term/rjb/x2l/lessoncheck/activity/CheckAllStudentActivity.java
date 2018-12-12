@@ -1,6 +1,7 @@
 package term.rjb.x2l.lessoncheck.activity;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,9 @@ import java.util.List;
 
 import term.rjb.x2l.lessoncheck.R;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
+import term.rjb.x2l.lessoncheck.pojo.Lesson;
+import term.rjb.x2l.lessoncheck.pojo.Sign_Student;
+import term.rjb.x2l.lessoncheck.presenter.TeacherPresenter;
 
 class Message{
     public StudentMessage student;
@@ -30,10 +34,53 @@ class Message{
         this.isChecked=target;
     }
 }
-public class CheckAllStudentActivity extends AppCompatActivity {
+public class CheckAllStudentActivity extends AppCompatActivity implements term.rjb.x2l.lessoncheck.Utils.View {
     private Toolbar toolBar;
     private ListView listView;
     private List<Message> messageList= new ArrayList<>();
+    private TeacherPresenter teacherPresenter;
+    private Handler handler = new Handler(){
+        public void handleMessage(android.os.Message message) {
+            switch (message.what){
+                case 0:
+                    List<Sign_Student> sign_students = (List<Sign_Student>)message.obj;
+                    if(sign_students.size()>0){
+                        for(Sign_Student sign_student : sign_students){
+                            messageList.add(new Message(new StudentMessage(sign_student.getStudent().getNumber(),sign_student.getStudent().getName()),sign_student.getIsSign()==1));//true到课 false缺勤
+                        }
+                    }
+
+                    final ArrayAdapter<Message> adapter1 = new ArrayAdapter<Message>(CheckAllStudentActivity.this,
+                            R.layout.class_check_message,messageList){
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            Message checkMessage =  getItem(position);
+                            LayoutInflater layoutInflater = getLayoutInflater();
+                            View view = layoutInflater.inflate(R.layout.class_check_message, parent, false);
+
+                            TextView CheckMessageStudent = view.findViewById(R.id.tv_check_time);
+                            TextView CheckMessageStatus =  view.findViewById(R.id.tv_check_ok);
+
+                            CheckMessageStudent.setText(checkMessage.student.number+" "+checkMessage.student.name);
+                            if(checkMessage.isChecked)
+                            {
+                                CheckMessageStatus.setText("到课");
+                                CheckMessageStatus.setTextColor(getResources().getColor(R.color.green));
+                            }
+                            else
+                            {
+                                CheckMessageStatus.setText("缺勤");
+                                CheckMessageStatus.setTextColor(getResources().getColor(R.color.red));
+                            }
+                            return view;
+                        }
+                    };
+                    listView.setAdapter(adapter1);
+
+            }
+
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +133,7 @@ public class CheckAllStudentActivity extends AppCompatActivity {
             key.setText("RJBNB");
         }
         else
-            key.setText("以结束");
+            key.setText("已结束");
     }
     void initList()
     {
@@ -100,36 +147,42 @@ public class CheckAllStudentActivity extends AppCompatActivity {
         //checkID 签到ID
 
         //样例    new学生(学号,名字) 是否签到
+        teacherPresenter = new TeacherPresenter(this);
+        teacherPresenter.getSignedStudent(checkID,handler);
 
-        messageList.add(new Message(new StudentMessage("1600300924","luqi"),true));//true到课 false缺勤
         //
 
+//
+//        final ArrayAdapter<Message> adapter1 = new ArrayAdapter<Message>(CheckAllStudentActivity.this,
+//                R.layout.class_check_message,messageList){
+//            @Override
+//            public View getView(int position, View convertView, ViewGroup parent) {
+//                Message checkMessage =  getItem(position);
+//                LayoutInflater layoutInflater = getLayoutInflater();
+//                View view = layoutInflater.inflate(R.layout.class_check_message, parent, false);
+//
+//                TextView CheckMessageStudent = view.findViewById(R.id.tv_check_time);
+//                TextView CheckMessageStatus =  view.findViewById(R.id.tv_check_ok);
+//
+//                CheckMessageStudent.setText(checkMessage.student.number+" "+checkMessage.student.name);
+//                if(checkMessage.isChecked)
+//                {
+//                    CheckMessageStatus.setText("到课");
+//                    CheckMessageStatus.setTextColor(getResources().getColor(R.color.green));
+//                }
+//                else
+//                {
+//                    CheckMessageStatus.setText("缺勤");
+//                    CheckMessageStatus.setTextColor(getResources().getColor(R.color.red));
+//                }
+//                return view;
+//            }
+//        };
+//        listView.setAdapter(adapter1);
+    }
 
-        final ArrayAdapter<Message> adapter1 = new ArrayAdapter<Message>(CheckAllStudentActivity.this,
-                R.layout.class_check_message,messageList){
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                Message checkMessage =  getItem(position);
-                LayoutInflater layoutInflater = getLayoutInflater();
-                View view = layoutInflater.inflate(R.layout.class_check_message, parent, false);
+    @Override
+    public void getALLessons(List<Lesson> lessons) {
 
-                TextView CheckMessageStudent = view.findViewById(R.id.tv_check_time);
-                TextView CheckMessageStatus =  view.findViewById(R.id.tv_check_ok);
-
-                CheckMessageStudent.setText(checkMessage.student.number+" "+checkMessage.student.name);
-                if(checkMessage.isChecked)
-                {
-                    CheckMessageStatus.setText("到课");
-                    CheckMessageStatus.setTextColor(getResources().getColor(R.color.green));
-                }
-                else
-                {
-                    CheckMessageStatus.setText("缺勤");
-                    CheckMessageStatus.setTextColor(getResources().getColor(R.color.red));
-                }
-                return view;
-            }
-        };
-        listView.setAdapter(adapter1);
     }
 }

@@ -66,4 +66,17 @@ public class User extends BmobUser {
     public void setSecretAnswer(String secretAnswer) {
         this.secretAnswer = secretAnswer;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", Number='" + Number + '\'' +
+                ", name='" + name + '\'' +
+                ", sex='" + sex + '\'' +
+                ", secretId=" + secretId +
+                ", isTeacher=" + isTeacher +
+                ", secretAnswer='" + secretAnswer + '\'' +
+                '}';
+    }
 }

@@ -2,12 +2,14 @@ package term.rjb.x2l.lessoncheck.activity;
 
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,21 +25,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import term.rjb.x2l.lessoncheck.R;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
+import term.rjb.x2l.lessoncheck.pojo.Lesson;
+import term.rjb.x2l.lessoncheck.pojo.Lesson_Sign;
+import term.rjb.x2l.lessoncheck.pojo.Lesson_Student;
+import term.rjb.x2l.lessoncheck.presenter.TeacherPresenter;
 
 //签到记录类
 class CheckMessage{
     public String time;
     public String isDone;
-    public Integer id;
-    public CheckMessage(String time,Integer id,Integer i)
+    public String id;
+    public CheckMessage(String time,String id,Integer i)
     {
         this.time=time;
-        isDone=(i==0)?"进行中":"以结束";
+        isDone=(i==0)?"进行中":"已结束";
         this.id=id;
     }
     public CheckMessage(String time,Integer i)
@@ -58,7 +68,7 @@ class StudentMessage{
     }
 }
 
-public class TeacherClassActivity extends AppCompatActivity {
+public class TeacherClassActivity extends AppCompatActivity implements term.rjb.x2l.lessoncheck.Utils.View {
     private  String classNum;
     private Toolbar toolBar;
     private TabLayout mTabLayout;
@@ -71,6 +81,47 @@ public class TeacherClassActivity extends AppCompatActivity {
     private List<StudentMessage> studentMessageList = new ArrayList<>();
     private  ListView checkListView;
     private  ListView studentsListView;
+    private TeacherPresenter teacherPresenter;
+    private Handler handler = new Handler(){
+      public void handleMessage(Message message){
+          switch (message.what){
+              case 0:
+                  List<Lesson_Sign> lesson_signs = (List<Lesson_Sign>) message.obj;
+                  if(lesson_signs.size()>0) {
+                      for (Lesson_Sign lesson_sign : lesson_signs) {
+                          SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+                          Date nowDate = new Date();
+                          Calendar rightNow = Calendar.getInstance();
+                          Date createdAt = new Date();
+                          try{
+                              createdAt = df.parse(lesson_sign.getCreatedAt());
+                          }catch (ParseException e1){
+                              e1.printStackTrace();
+                          }
+                          rightNow.setTime(createdAt);
+                          rightNow.add(Calendar.MINUTE, lesson_sign.getLastMinute());
+                          if( nowDate.before(rightNow.getTime()) ) {
+                              checkMessageList.add(new CheckMessage(lesson_sign.getCreatedAt().substring(0, lesson_sign.getCreatedAt().indexOf(" ")), lesson_sign.getSignNumber(),0 ));
+                          }else{
+                              checkMessageList.add(new CheckMessage(lesson_sign.getCreatedAt().substring(0, lesson_sign.getCreatedAt().indexOf(" ")), lesson_sign.getSignNumber(),1 ));
+                          }
+                      }
+                  }
+                  initCheckMessage();
+                  break;
+              case 1:
+                  List<Lesson_Student> lesson_students = (List<Lesson_Student>)message.obj;
+                  if(lesson_students.size()>0){
+                      for(Lesson_Student lesson_student : lesson_students){
+                         studentMessageList.add(new StudentMessage(lesson_student.getStudent().getNumber(),lesson_student.getStudent().getName()));
+                         Log.d("测试","学号和姓名"+lesson_student.getStudent().getNumber()+lesson_student.getStudent().getName()+lesson_student.getLessonNumber());
+                      }
+                  }
+                  initStudnetMessage();
+                  break;
+          }
+      }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,21 +171,10 @@ public class TeacherClassActivity extends AppCompatActivity {
         studentsListView=studentsView.findViewById(R.id.list_view);
         mViewList.add(checkView);
         mViewList.add(studentsView);
-
-
-        //测试
-        checkMessageList.add(new CheckMessage("2018-12-13",3,0));
-        checkMessageList.add(new CheckMessage("2018-12-12",2,1));
-        checkMessageList.add(new CheckMessage("2018-12-11",0,1));
-        checkMessageList.add(new CheckMessage("2018-12-10",1,1));
-        studentMessageList.add(new StudentMessage("1600300924","luqi"));
-        studentMessageList.add(new StudentMessage("1600300218","lujieming"));
-        studentMessageList.add(new StudentMessage("1700801413","hujingyu"));
-        //后端测试记得注释掉
-
-
-
-
+        teacherPresenter = new TeacherPresenter(this);
+        //获取签到记录
+        teacherPresenter.getSignByLesson(classNum,handler);
+        teacherPresenter.getAllLessonStudents(classNum,handler);
         mTitleList.add("课堂签到记录");
         mTitleList.add("我的学生");
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);//设置tab模式，当前为系统默认模式
@@ -168,7 +208,11 @@ public class TeacherClassActivity extends AppCompatActivity {
 
     }
     });
-        initCheckMessage();
+    }
+
+    @Override
+    public void getALLessons(List<Lesson> lessons) {
+
     }
 
 

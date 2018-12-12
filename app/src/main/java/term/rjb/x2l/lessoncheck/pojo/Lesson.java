@@ -7,7 +7,16 @@ public class Lesson extends BmobObject {
     private int studentNum;
     private String lessonNumber;
     private String lessonName;
+    private String teacherName;
     private User teacher;
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
 
     public int getId() {
         return id;

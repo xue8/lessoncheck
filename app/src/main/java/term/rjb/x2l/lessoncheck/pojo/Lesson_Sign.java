@@ -3,15 +3,24 @@ package term.rjb.x2l.lessoncheck.pojo;
 import cn.bmob.v3.BmobObject;
 
 public class Lesson_Sign extends BmobObject {
-    private String lessonObjectId;
+    private String lessonNumber;
     private String signNumber;
+    private int lastMinute;
 
-    public String getLessonObjectId() {
-        return lessonObjectId;
+    public int getLastMinute() {
+        return lastMinute;
     }
 
-    public void setLessonObjectId(String lessonObjectId) {
-        this.lessonObjectId = lessonObjectId;
+    public void setLastMinute(int lastMinute) {
+        this.lastMinute = lastMinute;
+    }
+
+    public String getLessonNumber() {
+        return lessonNumber;
+    }
+
+    public void setLessonNumber(String lessonNumber) {
+        this.lessonNumber = lessonNumber;
     }
 
     public String getSignNumber() {
