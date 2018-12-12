@@ -69,9 +69,8 @@ public class LoginActivity extends AppCompatActivity {
                     String username=user.getText().toString().trim();//账户
                     String passwords=password.getText().toString().trim();//密码
                     int susscesRegister=0;//注册是否成功
-
                     //TODO 后端->查询数据库,返回职业,0不存在,1学生,2老师
-                    loginPresenter.login(username,passwords);
+                    susscesRegister = loginPresenter.login(username,passwords);
 
 
                     switch (susscesRegister)

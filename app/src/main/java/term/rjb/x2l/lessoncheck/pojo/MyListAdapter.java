@@ -60,9 +60,6 @@ public class MyListAdapter extends RecyclerView.Adapter
         holder.classTeacher.setText(ci.teacherName);
         holder.studentNum.setText(ci.studentsNum+"位学员");
         holder.className.setText(ci.className);
-       // Random random = new Random();
-       // int ranColor = 0xff000000 | random.nextInt(0x00ffffff);
-     //   holder.recyclerView.setBackgroundColor(0xFF33B5E5) ;
        holder.itemView.setTag(ci.classNumber);
     }
 

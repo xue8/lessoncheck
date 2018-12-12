@@ -22,6 +22,7 @@ import android.widget.Toast;
 import term.rjb.x2l.lessoncheck.R;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
 import term.rjb.x2l.lessoncheck.pojo.Student;
+import term.rjb.x2l.lessoncheck.pojo.User;
 import term.rjb.x2l.lessoncheck.presenter.RegisterPresenter;
 
 import java.io.UnsupportedEncodingException;
@@ -129,12 +130,20 @@ public class RegisterActivity extends AppCompatActivity {
         Log.d("测试", "registerAndLogin: 是否是老师"+_isTeacher);
 
         boolean susscesRegister=true;//注册是否成功
-
+        User user = new User();
+        user.setIsTeacher(_isTeacher);
+        user.setNumber(_username);
+        user.setName(_name);
+        user.setSecretAnswer(_answers);
+        user.setSecretId(_mibaoProblem);
+        user.setSex(_sex);
+        user.setPassword(_passwords);
+        susscesRegister = registerPresenter.register(user);
 
         //TODO 后端->注册数据库，判断是否以有用户名，然后把susscesRegister返回
         //mibaoMap.get(_mibaoProblem)  把密保映射成int
         //begin
-
+        Log.d("测试", "susscesRegister: 是否注册成功"+susscesRegister);
 //        Student student = new Student();
 //        student.setNumber(_username);
 //        student.setPassword(_passwords);

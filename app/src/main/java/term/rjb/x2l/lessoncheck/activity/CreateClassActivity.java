@@ -18,10 +18,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.bmob.v3.BmobUser;
 import term.rjb.x2l.lessoncheck.R;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
+import term.rjb.x2l.lessoncheck.pojo.Lesson;
 import term.rjb.x2l.lessoncheck.pojo.TheClass;
+import term.rjb.x2l.lessoncheck.pojo.User;
 import term.rjb.x2l.lessoncheck.presenter.RegisterPresenter;
+import term.rjb.x2l.lessoncheck.presenter.TeacherPresenter;
 
 public class CreateClassActivity extends AppCompatActivity {
 
@@ -30,6 +34,8 @@ public class CreateClassActivity extends AppCompatActivity {
     private EditText className;
     private EditText classNumber;
     private  Button createClass;
+    private Lesson lesson;
+    private TeacherPresenter teacherPresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,19 +53,24 @@ public class CreateClassActivity extends AppCompatActivity {
         createClass=findViewById(R.id.btn_createClass);
         name=intent.getStringExtra("name");
         classNumber.setFilters(new InputFilter[]{inputFilter});
+        teacherPresenter = new TeacherPresenter(new TeacherMainActivity());
         createClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                lesson = new Lesson();
+                lesson.setlessonNumber(classNumber.getText().toString().trim());
+                lesson.setlessonName(className.getText().toString().trim());
+                User user = BmobUser.getCurrentUser(User.class);
+                lesson.setTeacher(user);
                 //TODO 后端->添加课堂 记得时间 返回一个是否成功的信号
-
                 //用道德数据有：
                 //className.getText().toString().trim() 课堂名称
                 //classNumber.getText().toString().trim() 课堂代码
                 //name 教师名
-
+                teacherPresenter.createClass(lesson);
                 //如果添加成功 执行下面的代码
-                TheClass temp=new TheClass(name,className.getText().toString().trim(),classNumber.getText().toString().trim(),0);
-                ((TeacherMainActivity)ActivityManager.getAppManager().getActivity(TeacherMainActivity.class)).addClass(temp);
+//                TheClass temp=new TheClass(name,className.getText().toString().trim(),classNumber.getText().toString().trim(),0);
+//                ((TeacherMainActivity)ActivityManager.getAppManager().getActivity(TeacherMainActivity.class)).addClass(temp);
                 ActivityManager.getAppManager().finishActivity(CreateClassActivity.this);
             }
         });
