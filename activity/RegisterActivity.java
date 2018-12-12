@@ -170,7 +170,6 @@ public class RegisterActivity extends AppCompatActivity {
         Log.d("测试", "susscesRegister: 是否注册成功"+susscesRegister);
         //end
 
-<<<<<<< HEAD
 //        if(susscesRegister)
 //        {
 //            Intent intent=new Intent(RegisterActivity.this,TeacherMainActivity.class);
@@ -185,34 +184,6 @@ public class RegisterActivity extends AppCompatActivity {
 //        {
 //            Toast.makeText(RegisterActivity.this,"账户名存在",Toast.LENGTH_SHORT).show();
 //        }
-=======
-        if(susscesRegister)
-        {
-            if(_isTeacher==1) {
-                Intent intent = new Intent(RegisterActivity.this, TeacherMainActivity.class);
-                intent.putExtra("user", _username);
-                intent.putExtra("name", _name);
-                intent.putExtra("isTeacher", _isTeacher);
-                startActivity(intent);
-                ActivityManager.getAppManager().finishActivity(LoginActivity.class);
-                ActivityManager.getAppManager().finishActivity(RegisterActivity.this);
-            }
-            else
-            {
-                Intent intent = new Intent(RegisterActivity.this, StudentMainActivity.class);
-                intent.putExtra("user", _username);
-                intent.putExtra("name", _name);
-                intent.putExtra("isTeacher", _isTeacher);
-                startActivity(intent);
-                ActivityManager.getAppManager().finishActivity(LoginActivity.class);
-                ActivityManager.getAppManager().finishActivity(RegisterActivity.this);
-            }
-        }
-        else
-        {
-            Toast.makeText(RegisterActivity.this,"账户名存在",Toast.LENGTH_SHORT).show();
-        }
->>>>>>> temp
     }
 
     //输入框限制功能

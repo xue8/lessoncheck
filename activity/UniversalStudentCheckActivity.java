@@ -5,15 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,34 +41,11 @@ public class UniversalStudentCheckActivity extends AppCompatActivity {
         initList();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if(who==1)
-        return super.onCreateOptionsMenu(menu);
-        else
-        {
-            MenuInflater inflater = this.getMenuInflater();
-            inflater.inflate(R.menu.menu_student_toolbar, menu);
-            return true;
-        }
-    }
-
     //顶部后退按钮
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId() )
-        {
-            case  android.R.id.home:
-                ActivityManager.getAppManager().finishActivity(this);
-                break;
-            case R.id.action1:
-                Intent intent=new Intent(UniversalStudentCheckActivity.this,StudentCheckActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.action2:
-                //TODO 后端->调用摄像机拍摄验证码
-                Toast.makeText(UniversalStudentCheckActivity.this,"打开照相机",Toast.LENGTH_SHORT).show();
-                break;
+        if(item.getItemId() == android.R.id.home){
+            ActivityManager.getAppManager().finishActivity(this);
         }
         return super.onOptionsItemSelected(item);
     }
