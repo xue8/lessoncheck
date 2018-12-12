@@ -67,11 +67,14 @@ public class CreateClassActivity extends AppCompatActivity {
                 //className.getText().toString().trim() 课堂名称
                 //classNumber.getText().toString().trim() 课堂代码
                 //name 教师名
+
+                //TODO 后端->把添加后课堂的objID返回过来生成新的数据对象传入UI列表数组！
                 teacherPresenter.createClass(lesson);
-                //如果添加成功 执行下面的代码
-//                TheClass temp=new TheClass(name,className.getText().toString().trim(),classNumber.getText().toString().trim(),0);
-//                ((TeacherMainActivity)ActivityManager.getAppManager().getActivity(TeacherMainActivity.class)).addClass(temp);
+                 TheClass temp=new TheClass(name,className.getText().toString().trim(),classNumber.getText().toString().trim(),0,"这里加ID");
+               ((TeacherMainActivity)ActivityManager.getAppManager().getActivity(TeacherMainActivity.class)).addClass(temp);
                 ActivityManager.getAppManager().finishActivity(CreateClassActivity.this);
+
+
             }
         });
 

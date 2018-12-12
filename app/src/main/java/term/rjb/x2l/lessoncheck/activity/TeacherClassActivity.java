@@ -40,6 +40,11 @@ class CheckMessage{
         isDone=(i==0)?"进行中":"以结束";
         this.id=id;
     }
+    public CheckMessage(String time,Integer i)
+    {
+        this.time=time;
+        isDone=(i==0)?"到课":"缺勤";
+    }
 }
 
 //学生记录类
@@ -240,6 +245,12 @@ public class TeacherClassActivity extends AppCompatActivity {
                 Toast.makeText(TeacherClassActivity.this,
                         "你选择了" + checkMessageList.get(i).id+"的签到记录",
                         Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(TeacherClassActivity.this,CheckAllStudentActivity.class);
+                intent.putExtra("classNum",classNum);
+                intent.putExtra("checkID",checkMessageList.get(i).id);
+                intent.putExtra("time",checkMessageList.get(i).time);
+                intent.putExtra("erweima",checkMessageList.get(i).isDone);
+                startActivity(intent);
             }
         });
     }
@@ -267,8 +278,9 @@ public class TeacherClassActivity extends AppCompatActivity {
                 View view = layoutInflater.inflate(R.layout.class_student_message, parent, false);
 
                 TextView StudentMessageNumber = view.findViewById(R.id.tv_class_student_number);
-
-                StudentMessageNumber.setText(studentMessage.number+"    "+studentMessage.name);
+                TextView StudentMessageName = view.findViewById(R.id.tv_class_student_name);
+                StudentMessageNumber.setText(studentMessage.number);
+                StudentMessageName.setText(studentMessage.name);
                 return view;
             }
         };
@@ -278,8 +290,13 @@ public class TeacherClassActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Toast.makeText(TeacherClassActivity.this,
-                        "你选择了" + studentMessageList.get(i).number+"的学生信息",
+                        "你选择了" + studentMessageList.get(i).number+"的签到信息",
                         Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(TeacherClassActivity.this,UniversalStudentCheckActivity.class);
+                intent.putExtra("classNum",classNum);
+                intent.putExtra("studentNum",studentMessageList.get(i).number);
+                intent.putExtra("isTeacher",1);
+                startActivity(intent);
             }
         });
     }

@@ -82,10 +82,13 @@ public class LoginActivity extends AppCompatActivity {
                             //TODO 前端->学生窗口跳转
                             break;
                         case 2:
-                            //TODO 前端->教师登录窗口跳转
+                            //TODO 后端->查询数据库,返回名字
+
+                            String name="";
+
                             Intent intent=new Intent(LoginActivity.this,TeacherMainActivity.class);
                             intent.putExtra("user",username);
-                            intent.putExtra("name",passwords);
+                            intent.putExtra("name",name);
                             intent.putExtra("isTeacher",1);
                             startActivity(intent);
                             ActivityManager.getAppManager().finishActivity(LoginActivity.this);

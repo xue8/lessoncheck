@@ -79,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            finish();
+            ActivityManager.getAppManager().finishActivity(this);
         }
         return super.onOptionsItemSelected(item);
     }
