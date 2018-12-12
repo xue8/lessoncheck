@@ -74,7 +74,6 @@ public class TeacherMainActivity extends AppCompatActivity implements term.rjb.x
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     //给左侧菜单添加点击事件
@@ -135,7 +134,7 @@ public class TeacherMainActivity extends AppCompatActivity implements term.rjb.x
         deleteMode = false;
         getSupportActionBar().setTitle("我的课堂");
         //TODO 后端->查找老师手下的所有课堂，new TheClass(老师名、课堂名、课堂代码、总学生数)。
-        //name 老师名
+        //username 老师名
         //begin
         //获取该教师所有课堂
         teacherPresenter = new TeacherPresenter(this);

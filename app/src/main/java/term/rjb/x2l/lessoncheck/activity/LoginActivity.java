@@ -103,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                     String passwords=password.getText().toString().trim();//密码
                     int susscesRegister=0;//注册是否成功
                     //TODO 后端->查询数据库,返回职业,0不存在,1学生,2老师
+<<<<<<< HEAD
                     loginPresenter.login(username,passwords, handler);
 //                    switch (susscesRegister)
 //                    {
@@ -125,9 +126,41 @@ public class LoginActivity extends AppCompatActivity {
 //                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
 //                            break;
 //                    }
+=======
+                    susscesRegister = loginPresenter.login(username,passwords);
+
+                    String name="";
+                    Intent intent;
+                    //TODO 后端->查询数据库,返回名字
+                    //name
+                    switch (susscesRegister)
+                    {
+                        case 0:
+
+                            break;
+                        case 1:
+                             intent=new Intent(LoginActivity.this,StudentMainActivity.class);
+                            intent.putExtra("user",username);
+                            intent.putExtra("name",name);
+                            intent.putExtra("isTeacher",0);
+                            startActivity(intent);
+                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
+                            break;
+                        case 2:
+                             intent=new Intent(LoginActivity.this,TeacherMainActivity.class);
+                            intent.putExtra("user",username);
+                            intent.putExtra("name",name);
+                            intent.putExtra("isTeacher",1);
+                            startActivity(intent);
+                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
+                            break;
+                            default:
+                                break;
+                    }
+>>>>>>> temp
                     break;
                 case R.id.btn_rigister:
-                    Intent intent =new Intent(LoginActivity.this, RegisterActivity.class);
+                    intent =new Intent(LoginActivity.this, RegisterActivity.class);
                     startActivity(intent);
                     break;
             }

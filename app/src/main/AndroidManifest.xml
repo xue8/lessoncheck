@@ -36,7 +36,10 @@
         <activity android:name=".activity.StudentMainActivity" />
         <activity android:name=".activity.TeacherActivity" />
         <activity android:name=".activity.UniversalStudentCheckActivity" />
-        <activity android:name=".activity.CheckAllStudentActivity"></activity>
+        <activity android:name=".activity.CheckAllStudentActivity" />
+        <activity android:name=".activity.CreateCheckActivity" />
+        <activity android:name=".activity.AddClassActivity" />
+        <activity android:name=".activity.StudentCheckActivity"></activity>
     </application>
 
 </manifest>
