@@ -154,13 +154,25 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(susscesRegister)
         {
-            Intent intent=new Intent(RegisterActivity.this,TeacherMainActivity.class);
-            intent.putExtra("user",_username);
-            intent.putExtra("name",_name);
-            intent.putExtra("isTeacher",_isTeacher);
-            startActivity(intent);
-            ActivityManager.getAppManager().finishActivity(LoginActivity.class);
-            ActivityManager.getAppManager().finishActivity(RegisterActivity.this);
+            if(_isTeacher==1) {
+                Intent intent = new Intent(RegisterActivity.this, TeacherMainActivity.class);
+                intent.putExtra("user", _username);
+                intent.putExtra("name", _name);
+                intent.putExtra("isTeacher", _isTeacher);
+                startActivity(intent);
+                ActivityManager.getAppManager().finishActivity(LoginActivity.class);
+                ActivityManager.getAppManager().finishActivity(RegisterActivity.this);
+            }
+            else
+            {
+                Intent intent = new Intent(RegisterActivity.this, StudentMainActivity.class);
+                intent.putExtra("user", _username);
+                intent.putExtra("name", _name);
+                intent.putExtra("isTeacher", _isTeacher);
+                startActivity(intent);
+                ActivityManager.getAppManager().finishActivity(LoginActivity.class);
+                ActivityManager.getAppManager().finishActivity(RegisterActivity.this);
+            }
         }
         else
         {

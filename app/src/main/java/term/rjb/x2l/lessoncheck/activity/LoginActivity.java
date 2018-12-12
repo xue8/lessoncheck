@@ -72,31 +72,37 @@ public class LoginActivity extends AppCompatActivity {
                     //TODO 后端->查询数据库,返回职业,0不存在,1学生,2老师
                     susscesRegister = loginPresenter.login(username,passwords);
 
-
+                    String name="";
+                    Intent intent;
+                    //TODO 后端->查询数据库,返回名字
+                    //name
                     switch (susscesRegister)
                     {
                         case 0:
 
                             break;
                         case 1:
-                            //TODO 前端->学生窗口跳转
+                             intent=new Intent(LoginActivity.this,StudentMainActivity.class);
+                            intent.putExtra("user",username);
+                            intent.putExtra("name",name);
+                            intent.putExtra("isTeacher",0);
+                            startActivity(intent);
+                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
                             break;
                         case 2:
-                            //TODO 后端->查询数据库,返回名字
-
-                            String name="";
-
-                            Intent intent=new Intent(LoginActivity.this,TeacherMainActivity.class);
+                             intent=new Intent(LoginActivity.this,TeacherMainActivity.class);
                             intent.putExtra("user",username);
                             intent.putExtra("name",name);
                             intent.putExtra("isTeacher",1);
                             startActivity(intent);
                             ActivityManager.getAppManager().finishActivity(LoginActivity.this);
                             break;
+                            default:
+                                break;
                     }
                     break;
                 case R.id.btn_rigister:
-                    Intent intent =new Intent(LoginActivity.this, RegisterActivity.class);
+                    intent =new Intent(LoginActivity.this, RegisterActivity.class);
                     startActivity(intent);
                     break;
             }

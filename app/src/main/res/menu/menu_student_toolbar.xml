@@ -3,8 +3,14 @@
 
     <item
         android:id="@+id/action1"
-        android:title="忘记密码？"
+        android:title=""
+        android:icon="@drawable/check"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/action2"
+        android:title=""
+        android:icon="@drawable/camera"
+        app:showAsAction="ifRoom"/>
 </menu>
 
