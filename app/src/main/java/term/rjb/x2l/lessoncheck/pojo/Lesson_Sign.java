@@ -5,6 +5,15 @@ import cn.bmob.v3.BmobObject;
 public class Lesson_Sign extends BmobObject {
     private String lessonObjectId;
     private String signNumber;
+    private int lastMinute;
+
+    public void setLastMinute(int lastMinute) {
+        this.lastMinute = lastMinute;
+    }
+
+    public int getLastMinute() {
+        return lastMinute;
+    }
 
     public String getLessonObjectId() {
         return lessonObjectId;
