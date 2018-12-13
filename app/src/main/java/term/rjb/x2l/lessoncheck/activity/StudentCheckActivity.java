@@ -42,6 +42,9 @@ public class StudentCheckActivity extends AppCompatActivity {
                 case 15:
                     Toast.makeText(StudentCheckActivity.this,"签到失败，签到时间已过！",Toast.LENGTH_SHORT).show();
                     break;
+                case 21:
+                    Toast.makeText(StudentCheckActivity.this,"签到失败，不在有效范围内签到！",Toast.LENGTH_SHORT).show();
+                    break;
             }
         }
     };

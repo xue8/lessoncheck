@@ -1,9 +1,10 @@
 package term.rjb.x2l.lessoncheck.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SwitchCompat;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -11,12 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 import cn.bmob.v3.BmobUser;
 import term.rjb.x2l.lessoncheck.R;
@@ -24,7 +22,6 @@ import term.rjb.x2l.lessoncheck.manager.ActivityManager;
 import term.rjb.x2l.lessoncheck.pojo.Lesson;
 import term.rjb.x2l.lessoncheck.pojo.TheClass;
 import term.rjb.x2l.lessoncheck.pojo.User;
-import term.rjb.x2l.lessoncheck.presenter.RegisterPresenter;
 import term.rjb.x2l.lessoncheck.presenter.TeacherPresenter;
 
 public class CreateClassActivity extends AppCompatActivity {
@@ -36,6 +33,19 @@ public class CreateClassActivity extends AppCompatActivity {
     private  Button createClass;
     private Lesson lesson;
     private TeacherPresenter teacherPresenter;
+    private Handler handler = new Handler() {
+        public void handleMessage(Message message) {
+            switch (message.what){
+                case 0:
+                    TheClass temp=new TheClass(name,className.getText().toString().trim(),classNumber.getText().toString().trim(),0,(String)message.obj);
+                    ((TeacherMainActivity) ActivityManager.getAppManager().getActivity(TeacherMainActivity.class)).addClass(temp);
+                    ActivityManager.getAppManager().finishActivity(CreateClassActivity.this);
+
+            }
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +76,7 @@ public class CreateClassActivity extends AppCompatActivity {
                 lesson.setLessonName(className.getText().toString().trim());
                 User user = BmobUser.getCurrentUser(User.class);
                 lesson.setTeacher(user);
+                lesson.setTeacherName(user.getName());
                 //TODO 后端->添加课堂 记得时间 返回一个是否成功的信号
                 //用道德数据有：
                 //className.getText().toString().trim() 课堂名称
@@ -73,11 +84,7 @@ public class CreateClassActivity extends AppCompatActivity {
                 //name 教师名
 
                 //TODO 后端->把添加后课堂的objID返回过来生成新的数据对象传入UI列表数组！
-                teacherPresenter.createClass(lesson);
-                 TheClass temp=new TheClass(name,className.getText().toString().trim(),classNumber.getText().toString().trim(),0,"这里加ID");
-               ((TeacherMainActivity)ActivityManager.getAppManager().getActivity(TeacherMainActivity.class)).addClass(temp);
-                ActivityManager.getAppManager().finishActivity(CreateClassActivity.this);
-
+                teacherPresenter.createClass(lesson,handler);
 
             }
         });

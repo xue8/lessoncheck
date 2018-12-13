@@ -49,6 +49,7 @@ public class StudentMainActivity extends AppCompatActivity {
                 case 20:
                     List<Lesson> list_l = (List<Lesson>)msg.obj;
                     System.out.println(list_l.size() + "xxxx");
+                    list.clear();
                     for (int i = 0; i < list_l.size(); i++){
                         System.out.println( "xxsxxxx" + list_l.get(i).getLessonName());
                         Integer a = list_l.get(i).getStudentNum();
@@ -171,7 +172,7 @@ public class StudentMainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.action2:
-                myListAdapter.notifyDataSetChanged();
+                MyClassInit();
                 Toast.makeText(StudentMainActivity.this, "刷新成功", Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:

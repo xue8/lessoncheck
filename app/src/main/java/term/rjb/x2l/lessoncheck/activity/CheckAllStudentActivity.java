@@ -1,8 +1,11 @@
 package term.rjb.x2l.lessoncheck.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,27 +16,73 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import term.rjb.x2l.lessoncheck.R;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
+import term.rjb.x2l.lessoncheck.pojo.Lesson;
+import term.rjb.x2l.lessoncheck.pojo.Sign_Student;
+import term.rjb.x2l.lessoncheck.presenter.TeacherPresenter;
 
 class Message{
     public StudentMessage student;
     public boolean isChecked;
-    public Message(StudentMessage student,boolean target)
+    public Message(StudentMessage student, boolean target)
     {
         this.student=student;
         this.isChecked=target;
     }
 }
-public class CheckAllStudentActivity extends AppCompatActivity {
+
+public class CheckAllStudentActivity extends AppCompatActivity implements term.rjb.x2l.lessoncheck.Utils.View {
     private Toolbar toolBar;
     private ListView listView;
     private List<Message> messageList= new ArrayList<>();
+    private TeacherPresenter teacherPresenter;
+    private Handler handler = new Handler(){
+        public void handleMessage(android.os.Message message) {
+            switch (message.what){
+                case 0:
+                    List<Sign_Student> sign_students = (List<Sign_Student>)message.obj;
+                    if(sign_students.size()>0){
+                        for(Sign_Student sign_student : sign_students){
+                            messageList.add(new Message(new StudentMessage(sign_student.getStudent().getNumber(),sign_student.getStudent().getName()),sign_student.getIsSign()==1));//true到课 false缺勤
+                        }
+                    }
+
+                    final ArrayAdapter<Message> adapter1 = new ArrayAdapter<Message>(CheckAllStudentActivity.this,
+                            R.layout.class_check_message,messageList){
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            Message checkMessage =  getItem(position);
+                            LayoutInflater layoutInflater = getLayoutInflater();
+                            View view = layoutInflater.inflate(R.layout.class_check_message, parent, false);
+
+                            TextView CheckMessageStudent = view.findViewById(R.id.tv_check_time);
+                            TextView CheckMessageStatus =  view.findViewById(R.id.tv_check_ok);
+
+                            CheckMessageStudent.setText(checkMessage.student.number+" "+checkMessage.student.name);
+                            if(checkMessage.isChecked)
+                            {
+                                CheckMessageStatus.setText("到课");
+                                CheckMessageStatus.setTextColor(getResources().getColor(R.color.green));
+                            }
+                            else
+                            {
+                                CheckMessageStatus.setText("缺勤");
+                                CheckMessageStatus.setTextColor(getResources().getColor(R.color.red));
+                            }
+                            return view;
+                        }
+                    };
+                    listView.setAdapter(adapter1);
+
+            }
+
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,10 +118,9 @@ public class CheckAllStudentActivity extends AppCompatActivity {
         if (!isDone)
             return;
         //TODO 后端->加载二维码
+        String checkID= getIntent().getStringExtra("checkID");
         ImageView erweima=findViewById(R.id.image_erWeiMa);
-
-        //样例
-        erweima.setImageResource(R.drawable.test);
+        erweima.setImageURI(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath() + "/DCIM/" + "/qr_code" + checkID + ".png")));
     }
     //加载口令，进行中则口令，否则已过时
     void initKey(boolean isDone)
@@ -83,10 +131,11 @@ public class CheckAllStudentActivity extends AppCompatActivity {
         //样例
         if (isDone) {
             //TODO 后端->加载口令
-            key.setText("RJBNB");
+            String checkID= getIntent().getStringExtra("checkID");
+            key.setText(checkID);
         }
         else
-            key.setText("以结束");
+            key.setText("已结束");
     }
     void initList()
     {
@@ -100,36 +149,42 @@ public class CheckAllStudentActivity extends AppCompatActivity {
         //checkID 签到ID
 
         //样例    new学生(学号,名字) 是否签到
+        teacherPresenter = new TeacherPresenter(this);
+        teacherPresenter.getSignedStudent(checkID,handler);
 
-        messageList.add(new Message(new StudentMessage("1600300924","luqi"),true));//true到课 false缺勤
         //
 
+//
+//        final ArrayAdapter<Message> adapter1 = new ArrayAdapter<Message>(CheckAllStudentActivity.this,
+//                R.layout.class_check_message,messageList){
+//            @Override
+//            public View getView(int position, View convertView, ViewGroup parent) {
+//                Message checkMessage =  getItem(position);
+//                LayoutInflater layoutInflater = getLayoutInflater();
+//                View view = layoutInflater.inflate(R.layout.class_check_message, parent, false);
+//
+//                TextView CheckMessageStudent = view.findViewById(R.id.tv_check_time);
+//                TextView CheckMessageStatus =  view.findViewById(R.id.tv_check_ok);
+//
+//                CheckMessageStudent.setText(checkMessage.student.number+" "+checkMessage.student.name);
+//                if(checkMessage.isChecked)
+//                {
+//                    CheckMessageStatus.setText("到课");
+//                    CheckMessageStatus.setTextColor(getResources().getColor(R.color.green));
+//                }
+//                else
+//                {
+//                    CheckMessageStatus.setText("缺勤");
+//                    CheckMessageStatus.setTextColor(getResources().getColor(R.color.red));
+//                }
+//                return view;
+//            }
+//        };
+//        listView.setAdapter(adapter1);
+    }
 
-        final ArrayAdapter<Message> adapter1 = new ArrayAdapter<Message>(CheckAllStudentActivity.this,
-                R.layout.class_check_message,messageList){
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                Message checkMessage =  getItem(position);
-                LayoutInflater layoutInflater = getLayoutInflater();
-                View view = layoutInflater.inflate(R.layout.class_check_message, parent, false);
+    @Override
+    public void getALLessons(List<Lesson> lessons) {
 
-                TextView CheckMessageStudent = view.findViewById(R.id.tv_check_time);
-                TextView CheckMessageStatus =  view.findViewById(R.id.tv_check_ok);
-
-                CheckMessageStudent.setText(checkMessage.student.number+" "+checkMessage.student.name);
-                if(checkMessage.isChecked)
-                {
-                    CheckMessageStatus.setText("到课");
-                    CheckMessageStatus.setTextColor(getResources().getColor(R.color.green));
-                }
-                else
-                {
-                    CheckMessageStatus.setText("缺勤");
-                    CheckMessageStatus.setTextColor(getResources().getColor(R.color.red));
-                }
-                return view;
-            }
-        };
-        listView.setAdapter(adapter1);
     }
 }

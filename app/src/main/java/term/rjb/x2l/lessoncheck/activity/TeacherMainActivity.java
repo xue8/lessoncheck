@@ -1,11 +1,13 @@
 package term.rjb.x2l.lessoncheck.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,9 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import term.rjb.x2l.lessoncheck.R;
-import java.util.List;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
 import term.rjb.x2l.lessoncheck.pojo.Lesson;
 import term.rjb.x2l.lessoncheck.pojo.MyListAdapter;
@@ -40,7 +42,60 @@ public class TeacherMainActivity extends AppCompatActivity implements term.rjb.x
     private MyListAdapter myListAdapter;
     private List<Lesson> lessons;
     private TeacherPresenter teacherPresenter;
+    private Handler handler = new Handler(){
+        public void handleMessage(Message message) {
+            switch (message.what) {
+                case 0:
+                    list.clear();
+                    for (Lesson lesson : (List<Lesson>)message.obj) {
+                        TheClass temp1 = new TheClass(lesson.getTeacher().getName(), lesson.getLessonName(), lesson.getLessonNumber(), lesson.getStudentNum(), lesson.getObjectId());
+                        list.add(temp1);
+                    }
+                    Log.d("测试", "list大小" + list.size());
+                    //begin
 
+                    myListAdapter = new MyListAdapter(list);
+                    //让布局显示
+                    myListAdapter.notifyDataSetChanged();
+                    myListAdapter.setItemClickListener(new MyListAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(String id) {
+                            //TODO 前端->进入课堂详情页面
+                            Toast.makeText(TeacherMainActivity.this, "进入课号" + id, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(TeacherMainActivity.this, TeacherClassActivity.class);
+                            // Intent intent=new Intent(RegisterActivity.this,StudentMainActivity.class);
+                            intent.putExtra("classNumber", id);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onItemLongClick(String id) {
+                            if (!deleteMode)
+                                return;
+
+                            Toast.makeText(TeacherMainActivity.this, "删除课号" + id, Toast.LENGTH_SHORT).show();
+                            for (int i = 0; i < list.size(); i++) {
+                                if (list.get(i).getClassNumber().equals(id)) {
+                                    String targetObjID = list.get(i).getClassObjID();
+                                    Log.d("测试", "删除课号" + id);
+                                    teacherPresenter.deleteClass(targetObjID);
+                                    //TODO 后端->删除课堂
+                                    //用到的数据
+                                    //targetObjID OBJID
+
+                                    //begin
+                                    //end
+                                    list.remove(i);
+                                }
+                            }
+                            myListAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    mRecyclerView.setAdapter(myListAdapter);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +172,7 @@ public class TeacherMainActivity extends AppCompatActivity implements term.rjb.x
                 startActivity(intent);
                 return true;
             case R.id.action2:
-                myListAdapter.notifyDataSetChanged();
+                MyClassInit();
                 Toast.makeText(TeacherMainActivity.this, "刷新成功", Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:
@@ -138,7 +193,7 @@ public class TeacherMainActivity extends AppCompatActivity implements term.rjb.x
         //begin
         //获取该教师所有课堂
         teacherPresenter = new TeacherPresenter(this);
-        teacherPresenter.getAllClassByTeacherNumber();
+        teacherPresenter.getAllClassByTeacherNumber(handler);
 //        while(lessons == null)
 ////        for(Lesson lesson : lessons){
 ////            TheClass temp1 = new TheClass(lesson.getTeacher().getName(),lesson.getLessonName(),lesson.getLessonNumber(),lesson.getStudentNum(),lesson.getObjectId());
@@ -193,55 +248,7 @@ public class TeacherMainActivity extends AppCompatActivity implements term.rjb.x
 
     @Override
     public void getALLessons(List<Lesson> lessons) {
-        showLessons(lessons);
     }
 
-    private void showLessons(List<Lesson> lessons){
-        Log.d("测试",""+lessons.size());
-        for(Lesson lesson : lessons){
-            TheClass temp1 = new TheClass(lesson.getTeacher().getName(),lesson.getLessonName(),lesson.getLessonNumber(),lesson.getStudentNum(),lesson.getObjectId());
-            list.add(temp1);
-        }
-        Log.d("测试","list大小"+list.size());
-        //begin
-
-        myListAdapter = new MyListAdapter(list);
-        //让布局显示
-        myListAdapter.notifyDataSetChanged();
-        myListAdapter.setItemClickListener(new MyListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(String id) {
-                Toast.makeText(TeacherMainActivity.this, "进入课号" + id, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(TeacherMainActivity.this, TeacherClassActivity.class);
-                // Intent intent=new Intent(RegisterActivity.this,StudentMainActivity.class);
-                intent.putExtra("classNumber", id);
-                startActivity(intent);
-            }
-
-            @Override
-            public void onItemLongClick(String id) {
-                if (!deleteMode)
-                    return;
-
-                Toast.makeText(TeacherMainActivity.this, "删除课号" + id, Toast.LENGTH_SHORT).show();
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getClassNumber().equals(id)) {
-                        String targetObjID = list.get(i).getClassObjID();
-                        Log.d("测试","删除课号"+id);
-                        teacherPresenter.deleteClass(targetObjID);
-                        //TODO 后端->删除课堂
-                        //用到的数据
-                        //targetObjID OBJID
-
-                        //begin
-                        //end
-                        list.remove(i);
-                    }
-                }
-                myListAdapter.notifyDataSetChanged();
-            }
-        });
-        mRecyclerView.setAdapter(myListAdapter);
-    }
 }
 

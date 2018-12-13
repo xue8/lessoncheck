@@ -45,6 +45,9 @@ public class ResultActivity extends Activity {
 					Toast.makeText(ResultActivity.this,"签到失败，签到时间已过！",Toast.LENGTH_SHORT).show();
 					ActivityManager.getAppManager().finishActivity(ResultActivity.this);
 					break;
+				case 21:
+					Toast.makeText(ResultActivity.this,"签到失败，不在有效范围内签到！",Toast.LENGTH_SHORT).show();
+					break;
 			}
 		}
 	};

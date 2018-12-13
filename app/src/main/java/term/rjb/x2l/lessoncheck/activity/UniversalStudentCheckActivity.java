@@ -1,20 +1,15 @@
 package term.rjb.x2l.lessoncheck.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.os.Build;
-import android.os.Environment;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,35 +21,69 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import term.rjb.x2l.lessoncheck.R;
-import term.rjb.x2l.lessoncheck.Utils.QRCodeUtil;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
+import term.rjb.x2l.lessoncheck.pojo.Lesson;
 import term.rjb.x2l.lessoncheck.pojo.Sign_Student;
 import term.rjb.x2l.lessoncheck.presenter.StudentPresenter;
+import term.rjb.x2l.lessoncheck.presenter.TeacherPresenter;
 import term.rjb.x2l.lessoncheck.zxing.activity.CaptureActivity;
 
 
 /**
  *  通用窗口 查看学生的某课堂的所有签到记录 学生看自己 教师看指定学生
  */
-public class UniversalStudentCheckActivity extends AppCompatActivity {
+public class UniversalStudentCheckActivity extends AppCompatActivity implements term.rjb.x2l.lessoncheck.Utils.View {
     private Toolbar toolBar;
     private Integer who;
     private ListView listView;
     private List<CheckMessage> studentMessageList= new ArrayList<>();
+    private TeacherPresenter teacherPresenter;
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 6;
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE2 = 7;
+    private ArrayAdapter<CheckMessage> adapter1;
 
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
+    private Handler handler = new Handler(){
+        public void handleMessage(Message message){
+            switch (message.what){
+                case 6 :
+                    List<Sign_Student> sign_students = (List<Sign_Student>) message.obj;
+                    if(sign_students.size()>0){
+                        for(Sign_Student sign_student : sign_students){
+                            studentMessageList.add(new CheckMessage(sign_student.getCreatedAt().substring(0, sign_student.getCreatedAt().indexOf(" ")),sign_student.getIsSign()));//1到课 0缺勤
+                        }
+                    }
+                    adapter1 = new ArrayAdapter<CheckMessage>(UniversalStudentCheckActivity.this,
+                            R.layout.class_check_message,studentMessageList){
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            CheckMessage checkMessage =  getItem(position);
+                            LayoutInflater layoutInflater = getLayoutInflater();
+                            View view = layoutInflater.inflate(R.layout.class_check_message, parent, false);
+
+                            TextView CheckMessageTime = view.findViewById(R.id.tv_check_time);
+                            TextView CheckMessageStatus =  view.findViewById(R.id.tv_check_ok);
+
+                            CheckMessageTime.setText(checkMessage.time);
+                            CheckMessageStatus.setText(checkMessage.isDone);
+                            if(checkMessage.isDone.equals("缺勤"))
+                            {
+                                CheckMessageStatus.setTextColor(getResources().getColor(R.color.red));
+                            }
+                            else
+                            {
+                                CheckMessageStatus.setTextColor(getResources().getColor(R.color.green));
+                            }
+                            return view;
+                        }
+                    };
+                    listView.setAdapter(adapter1);
                 case 20:
-                    List<Sign_Student> list_l = (List<Sign_Student>)msg.obj;
                     studentMessageList.clear();
+                    List<Sign_Student> list_l = (List<Sign_Student>)message.obj;
                     for (int i = 0; i < list_l.size(); i++){
                         //TODO 后端->根据课号获取这个课号的所有签到记录ID 然后用它搜索这个学生在这个课堂的所有签到记录 返回一个CheckMessage数组
                         //用到的数据
@@ -70,7 +99,7 @@ public class UniversalStudentCheckActivity extends AppCompatActivity {
                         System.out.println("---------" + list_l.get(i).getIsSign());
                         studentMessageList.add(new CheckMessage(list_l.get(i).getCreatedAt(),list_l.get(i).getIsSign()));//1到课 0缺勤
                     }
-                    final ArrayAdapter<CheckMessage> adapter1 = new ArrayAdapter<CheckMessage>(UniversalStudentCheckActivity.this,
+                    adapter1 = new ArrayAdapter<CheckMessage>(UniversalStudentCheckActivity.this,
                             R.layout.class_check_message,studentMessageList){
                         @Override
                         public View getView(int position, View convertView, ViewGroup parent) {
@@ -112,8 +141,7 @@ public class UniversalStudentCheckActivity extends AppCompatActivity {
                     break;
             }
         }
-    };
-
+    } ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,22 +207,29 @@ public class UniversalStudentCheckActivity extends AppCompatActivity {
     {
 
             String classNum= getIntent().getStringExtra("classNum");
-            String Student= getIntent().getStringExtra("studentNum");
+            String studentNum= getIntent().getStringExtra("studentNum");
+            //TODO 后端->根据课号获取这个课号的所有签到记录ID 然后用它搜索这个学生在这个课堂的所有签到记录 返回一个CheckMessage数组
+            //用到的数据
+            //Student  学生用户名
+            //classNum 课堂号码
 
-            System.out.println( "classNum"+ classNum);
-            StudentPresenter studentPresenter = new StudentPresenter();
-            studentPresenter.getSignStatusByLessonId(classNum,handler);
+            if (who==1)
+            {
+                teacherPresenter  = new TeacherPresenter(this);
+                teacherPresenter.getAllSignMessageByStudentNumber(classNum,studentNum,handler);
+            }
+            else
+            {
+                System.out.println( "classNum"+ classNum);
+                StudentPresenter studentPresenter = new StudentPresenter();
+                studentPresenter.getSignStatusByLessonId(classNum,handler);
+            }
 
-//            //用到的数据
-//            //Student  学生用户名
-//            //classNum 课堂号码
-//
-//            //样例    时间 是否签到
-//            studentMessageList.add(new CheckMessage("2018-10-3",0));//1到课 0缺勤
-//            studentMessageList.add(new CheckMessage("2018-10-2",1));//1到课 0缺勤
-//            studentMessageList.add(new CheckMessage("2018-10-1",0));//1到课 0缺勤
-//            studentMessageList.add(new CheckMessage("2018-9-27",1));//1到课 0缺勤
-//            //
+            //样例    时间 是否签到
+        
+            //
+
+
 //            final ArrayAdapter<CheckMessage> adapter1 = new ArrayAdapter<CheckMessage>(UniversalStudentCheckActivity.this,
 //                    R.layout.class_check_message,studentMessageList){
 //                @Override
@@ -240,5 +275,10 @@ public class UniversalStudentCheckActivity extends AppCompatActivity {
         setSupportActionBar(toolBar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void getALLessons(List<Lesson> lessons) {
+
     }
 }

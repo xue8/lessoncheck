@@ -5,7 +5,7 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
 import cn.bmob.v3.datatype.BmobPointer;
 
 public class Lesson_Sign extends BmobObject {
-    private String lessonObjectId;
+    private String lessonNumber;
     private String signNumber;
     private int lastMinute;
     private BmobGeoPoint address;
@@ -26,12 +26,12 @@ public class Lesson_Sign extends BmobObject {
         return lastMinute;
     }
 
-    public String getLessonObjectId() {
-        return lessonObjectId;
+    public String getLessonNumber() {
+        return lessonNumber;
     }
 
-    public void setLessonObjectId(String lessonObjectId) {
-        this.lessonObjectId = lessonObjectId;
+    public void setLessonNumber(String lessonNumber) {
+        this.lessonNumber = lessonNumber;
     }
 
     public String getSignNumber() {

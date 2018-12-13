@@ -333,14 +333,15 @@ public class StudentPresenter {
                                                                     message.what = 17;
                                                                     handler.sendMessage(message);
                                                                     Log.d("测试", "插入成功" + user.getObjectId());
-//                                                                Message message = new Message();
-//                                                                message.obj = "签到失败";
-//                                                                message.what = 16;
-//                                                                handler.sendMessage(message);
-//                                                                Log.d("测试", "插入失败" + user.getObjectId());
                                                                 }
                                                             }
                                                         });
+                                                    }else{
+                                                        Message message = new Message();
+                                                        message.obj = "签到失败，不在有效范围内签到！";
+                                                        message.what = 21;
+                                                        handler.sendMessage(message);
+                                                        Log.d("测试", "插入失败" + user.getObjectId());
                                                     }
                                                 }else{
                                                     System.out.println("aaaaaaaaaa");
