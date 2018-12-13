@@ -263,7 +263,8 @@ public class StudentPresenter {
             }
         });
     }
-    // 签到 message.what = 17 签到成功  message.what = 16 签到失败
+
+    // 签到 message.what = 17 签到成功  message.what = 16 签到失败 message.what = 18;口令不正确
     public void setSignBySignNumber(String signNumber, Handler h){
         final String sign = signNumber;
         handler = h;
@@ -330,7 +331,11 @@ public class StudentPresenter {
                                     });
 
                         }else{
-//                            System.out.println("签到失败，已过签到时间");
+                            Message message = new Message();
+                            message.obj = "签到失败";
+                            message.what = 15;
+                            handler.sendMessage(message);
+                            System.out.println("签到失败，已过签到时间");
                         }
                     }else{
                         Message message = new Message();

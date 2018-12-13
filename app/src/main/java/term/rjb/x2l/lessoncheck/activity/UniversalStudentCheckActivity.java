@@ -97,8 +97,18 @@ public class UniversalStudentCheckActivity extends AppCompatActivity {
                     listView.setAdapter(adapter1);
 //                    ActivityManager.getAppManager().finishActivity(UniversalStudentCheckActivity.this);
                     break;
-                case 19:
+                case 17:
+                    Toast.makeText(UniversalStudentCheckActivity.this,"签到成功！",Toast.LENGTH_SHORT).show();
+                    ActivityManager.getAppManager().finishActivity(UniversalStudentCheckActivity.this);
+                    break;
+                case 16:
                     Toast.makeText(UniversalStudentCheckActivity.this,"签到失败！",Toast.LENGTH_SHORT).show();
+                    break;
+                case 18:
+                    Toast.makeText(UniversalStudentCheckActivity.this,"签到失败，口令出错！",Toast.LENGTH_SHORT).show();
+                    break;
+                case 15:
+                    Toast.makeText(UniversalStudentCheckActivity.this,"签到失败，签到时间已过！",Toast.LENGTH_SHORT).show();
                     break;
             }
         }

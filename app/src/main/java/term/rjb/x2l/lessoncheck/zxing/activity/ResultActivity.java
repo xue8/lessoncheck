@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import term.rjb.x2l.lessoncheck.R;
 import term.rjb.x2l.lessoncheck.activity.StudentCheckActivity;
+import term.rjb.x2l.lessoncheck.activity.UniversalStudentCheckActivity;
 import term.rjb.x2l.lessoncheck.manager.ActivityManager;
 import term.rjb.x2l.lessoncheck.presenter.StudentPresenter;
 import term.rjb.x2l.lessoncheck.zxing.decode.DecodeThread;
@@ -33,6 +34,14 @@ public class ResultActivity extends Activity {
 					break;
 				case 16:
 					Toast.makeText(ResultActivity.this,"签到失败！",Toast.LENGTH_SHORT).show();
+					ActivityManager.getAppManager().finishActivity(ResultActivity.this);
+					break;
+				case 18:
+					Toast.makeText(ResultActivity.this,"签到失败，口令出错！",Toast.LENGTH_SHORT).show();
+					ActivityManager.getAppManager().finishActivity(ResultActivity.this);
+					break;
+				case 15:
+					Toast.makeText(ResultActivity.this,"签到失败，签到时间已过！",Toast.LENGTH_SHORT).show();
 					ActivityManager.getAppManager().finishActivity(ResultActivity.this);
 					break;
 			}
