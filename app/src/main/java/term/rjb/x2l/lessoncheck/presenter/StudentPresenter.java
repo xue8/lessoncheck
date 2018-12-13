@@ -308,49 +308,49 @@ public class StudentPresenter {
                         if( nowDate.before(rightNow.getTime()) ){
                             String bql ="select * from Sign_Student where signNumber='" + sign + "' and student='" + user.getObjectId() + "' order by createdAt desc";
                             new BmobQuery<Sign_Student>().doSQLQuery(bql,new SQLQueryListener<Sign_Student>() {
-                                        @Override
-                                        public void done(BmobQueryResult<Sign_Student> result, BmobException e) {
-                                            if(e ==null){
-                                                final List<Sign_Student> list = (List<Sign_Student>) result.getResults();
-                                                if(list!=null && list.size()>0){
-                                                    sign_student.setIsSign(1);
-                                                    System.out.println("list.get(0).getObjectId()" + list.get(0).getObjectId());
+                                @Override
+                                public void done(BmobQueryResult<Sign_Student> result, BmobException e) {
+                                    if(e ==null){
+                                        final List<Sign_Student> list = (List<Sign_Student>) result.getResults();
+                                        if(list!=null && list.size()>0){
+                                            sign_student.setIsSign(1);
+                                            System.out.println("list.get(0).getObjectId()" + list.get(0).getObjectId());
 
-                                                    // 判断学生签到经纬度是否在允许的范围内
-                                                    if( address_teacher.distanceInKilometersTo(address_student) < 1 ){
-                                                        sign_student.update(list.get(0).getObjectId(), new UpdateListener() {
-                                                            @Override
-                                                            public void done(BmobException e) {
-                                                                if (e == null) {
-                                                                    Message message = new Message();
-                                                                    message.obj = "签到成功";
-                                                                    message.what = 17;
-                                                                    handler.sendMessage(message);
-                                                                    Log.d("测试", "插入成功" + user.getObjectId());
-                                                                } else {
-                                                                    Message message = new Message();
-                                                                    message.obj = "签到成功";
-                                                                    message.what = 17;
-                                                                    handler.sendMessage(message);
-                                                                    Log.d("测试", "插入成功" + user.getObjectId());
-                                                                }
-                                                            }
-                                                        });
-                                                    }else{
-                                                        Message message = new Message();
-                                                        message.obj = "签到失败，不在有效范围内签到！";
-                                                        message.what = 21;
-                                                        handler.sendMessage(message);
-                                                        Log.d("测试", "插入失败" + user.getObjectId());
+                                            // 判断学生签到经纬度是否在允许的范围内
+                                            if( address_teacher.distanceInKilometersTo(address_student) < 1 ){
+                                                sign_student.update(list.get(0).getObjectId(), new UpdateListener() {
+                                                    @Override
+                                                    public void done(BmobException e) {
+                                                        if (e == null) {
+                                                            Message message = new Message();
+                                                            message.obj = "签到成功";
+                                                            message.what = 17;
+                                                            handler.sendMessage(message);
+                                                            Log.d("测试", "插入成功" + user.getObjectId());
+                                                        } else {
+                                                            Message message = new Message();
+                                                            message.obj = "签到成功";
+                                                            message.what = 17;
+                                                            handler.sendMessage(message);
+                                                            Log.d("测试", "插入成功" + user.getObjectId());
+                                                        }
                                                     }
-                                                }else{
-                                                    System.out.println("aaaaaaaaaa");
-                                                }
-                                            }else {
-                                                System.out.println("aaaaaaaaaa" + e.getMessage());
+                                                });
+                                            }else{
+                                                Message message = new Message();
+                                                message.obj = "签到失败，不在有效范围内签到！";
+                                                message.what = 21;
+                                                handler.sendMessage(message);
+                                                Log.d("测试", "插入失败" + user.getObjectId());
                                             }
+                                        }else{
+                                            System.out.println("aaaaaaaaaa");
                                         }
-                                    });
+                                    }else {
+                                        System.out.println("aaaaaaaaaa" + e.getMessage());
+                                    }
+                                }
+                            });
 
                         }else{
                             Message message = new Message();
@@ -408,10 +408,11 @@ public class StudentPresenter {
                     System.out.println("sql + " + classSql);
                     String bql;
                     if( !classSql.equals("")){
-                        bql ="select * from Sign_Student where student='" + user.getObjectId() + "' and " + classSql;
+                       bql ="select * from Sign_Student where student='" + user.getObjectId() + "' and (" + classSql + ")";
                     }else {
                         bql ="select * from Sign_Student where signNumber='2sdiashdusaiudhaiudhaiud'";
                     }
+                    System.out.println("blq" + bql);
                     new BmobQuery<Sign_Student>().doSQLQuery(bql,new SQLQueryListener<Sign_Student>(){
                         @Override
                         public void done(BmobQueryResult<Sign_Student> result, BmobException e) {

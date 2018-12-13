@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import term.rjb.x2l.lessoncheck.R;
@@ -51,11 +52,17 @@ public class UniversalStudentCheckActivity extends AppCompatActivity implements 
             switch (message.what){
                 case 6 :
                     List<Sign_Student> sign_students = (List<Sign_Student>) message.obj;
-                    if(sign_students.size()>0){
-                        for(Sign_Student sign_student : sign_students){
-                            studentMessageList.add(new CheckMessage(sign_student.getCreatedAt().substring(0, sign_student.getCreatedAt().indexOf(" ")),sign_student.getIsSign()));//1到课 0缺勤
-                        }
+                    studentMessageList.clear();
+                    for (int i = 0; i <sign_students.size(); i++){
+                        System.out.println("---------" + sign_students.get(i).getIsSign());
+                        studentMessageList.add(new CheckMessage(sign_students.get(i).getCreatedAt().substring(0, sign_students.get(i).getCreatedAt().indexOf(" ")),sign_students.get(i).getIsSign()));//1到课 0缺勤
                     }
+                    Collections.reverse(studentMessageList);
+//                    if(sign_students.size()>0){
+//                        for(Sign_Student sign_student : sign_students){
+//                            studentMessageList.add(new CheckMessage(sign_student.getCreatedAt().substring(0, sign_student.getCreatedAt().indexOf(" ")),sign_student.getIsSign()));//1到课 0缺勤
+//                        }
+//                    }
                     adapter1 = new ArrayAdapter<CheckMessage>(UniversalStudentCheckActivity.this,
                             R.layout.class_check_message,studentMessageList){
                         @Override
@@ -84,7 +91,8 @@ public class UniversalStudentCheckActivity extends AppCompatActivity implements 
                 case 20:
                     studentMessageList.clear();
                     List<Sign_Student> list_l = (List<Sign_Student>)message.obj;
-                    for (int i = 0; i < list_l.size(); i++){
+                    studentMessageList.clear();
+                    for (int i = list_l.size()-1; i >= 0; i--){
                         //TODO 后端->根据课号获取这个课号的所有签到记录ID 然后用它搜索这个学生在这个课堂的所有签到记录 返回一个CheckMessage数组
                         //用到的数据
                         //Student  学生用户名
@@ -128,6 +136,7 @@ public class UniversalStudentCheckActivity extends AppCompatActivity implements 
                     break;
                 case 17:
                     Toast.makeText(UniversalStudentCheckActivity.this,"签到成功！",Toast.LENGTH_SHORT).show();
+                    initList();
                     ActivityManager.getAppManager().finishActivity(UniversalStudentCheckActivity.this);
                     break;
                 case 16:
@@ -203,9 +212,9 @@ public class UniversalStudentCheckActivity extends AppCompatActivity implements 
         return super.onOptionsItemSelected(item);
     }
 
-    void initList()
+      public   void initList()
     {
-
+        Toast.makeText(UniversalStudentCheckActivity.this,"正在拉取信息",Toast.LENGTH_SHORT).show();
             String classNum= getIntent().getStringExtra("classNum");
             String studentNum= getIntent().getStringExtra("studentNum");
             //TODO 后端->根据课号获取这个课号的所有签到记录ID 然后用它搜索这个学生在这个课堂的所有签到记录 返回一个CheckMessage数组

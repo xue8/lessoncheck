@@ -31,6 +31,7 @@ public class StudentCheckActivity extends AppCompatActivity {
             switch (msg.what) {
                 case 17:
                     Toast.makeText(StudentCheckActivity.this,"签到成功！",Toast.LENGTH_SHORT).show();
+                    ((UniversalStudentCheckActivity)ActivityManager.getAppManager().getActivity(UniversalStudentCheckActivity.class)).initList();
                     ActivityManager.getAppManager().finishActivity(StudentCheckActivity.this);
                     break;
                 case 16:

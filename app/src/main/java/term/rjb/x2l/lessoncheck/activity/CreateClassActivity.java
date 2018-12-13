@@ -67,9 +67,10 @@ public class CreateClassActivity extends AppCompatActivity {
         createClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (classNumber.getText().toString().trim().length()<1||className.getText().toString().trim().length()<7)
+                if (classNumber.getText().toString().trim().length() != 7)
                 {
                     Toast.makeText(CreateClassActivity.this,"信息不全",Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 lesson = new Lesson();
                 lesson.setLessonNumber(classNumber.getText().toString().trim());

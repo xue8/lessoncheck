@@ -123,7 +123,7 @@ public class CreateCheckActivity extends AppCompatActivity implements term.rjb.x
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_CODE);
         } else {
-            address = gpsUtils.getLocation(this);
+            address = gpsUtils.getLocation(CreateCheckActivity.this);
             String[] address1 = address.split(",");
 
             double d = Double.parseDouble(address1[0]);
