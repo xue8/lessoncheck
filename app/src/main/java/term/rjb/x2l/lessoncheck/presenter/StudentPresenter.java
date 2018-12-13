@@ -19,6 +19,8 @@ import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobGeoPoint;
+import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -47,11 +49,14 @@ public class StudentPresenter {
     int studentNum;
     int num1;
     String objectId1;
+    private BmobGeoPoint address_teacher;
+    private BmobGeoPoint address_student;
 
     // 显示学生加入的所有课堂  message.what = 20
     public void getAllClassByStudentNumber(Handler h){
         this.handler = h;
         User user = BmobUser.getCurrentUser(User.class);
+//        System.out.println(user.getAdd);
         // 获取LessonObjectId
         BmobQuery query =new BmobQuery("Lesson_Student");
         query.addWhereEqualTo("student", user.getObjectId());
@@ -265,14 +270,16 @@ public class StudentPresenter {
     }
 
     // 签到 message.what = 17 签到成功  message.what = 16 签到失败 message.what = 18;口令不正确
-    public void setSignBySignNumber(String signNumber, Handler h){
+    public void setSignBySignNumber(String signNumber, String classNum,Handler h){
+        System.out.println("signNumber" + signNumber);
+        System.out.println("classNum" + classNum);
         final String sign = signNumber;
         handler = h;
         final User user = BmobUser.getCurrentUser(User.class);
         sign_student.setStudent(user);
         sign_student.setSignNumber(signNumber);
 
-        String bql ="select * from Lesson_Sign where signNumber = '" + signNumber + "' order by createdAt desc";
+        String bql ="select * from Lesson_Sign where signNumber = '" + signNumber + "' and lessonNumber='" +  classNum +  "' order by createdAt desc";
         new BmobQuery<Lesson_Sign>().doSQLQuery(bql,new SQLQueryListener<Lesson_Sign>(){
             @Override
             public void done(BmobQueryResult<Lesson_Sign> result, BmobException e) {
@@ -281,8 +288,6 @@ public class StudentPresenter {
                     if(list!=null && list.size()>0){
                         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
                         Date nowDate = new Date();
-
-                        System.out.println("现在时间：" + df.format(nowDate)); // 输出已经格式化的现在时间（24小时制）
 
                         Calendar rightNow = Calendar.getInstance();
                         Date createdAt = new Date();
@@ -293,34 +298,50 @@ public class StudentPresenter {
                         }
                         rightNow.setTime(createdAt);
                         rightNow.add(Calendar.MINUTE, list.get(0).getLastMinute());
-
+                        // 获取老师发起签到的经纬度
+                        address_teacher = list.get(0).getAddress();
+                        // 获取学生的经纬度
+                        address_student = user.getAddress();
+                        System.out.println("address_teacher " + address_teacher.getLongitude() + "--" + address_teacher.getLatitude());
+                        System.out.println("address_student " + address_student.getLongitude() + "--" + address_student.getLatitude());
+                        System.out.println( " distanceInKilometersTo " + address_teacher.distanceInKilometersTo(address_student));
                         if( nowDate.before(rightNow.getTime()) ){
                             String bql ="select * from Sign_Student where signNumber='" + sign + "' and student='" + user.getObjectId() + "' order by createdAt desc";
                             new BmobQuery<Sign_Student>().doSQLQuery(bql,new SQLQueryListener<Sign_Student>() {
                                         @Override
                                         public void done(BmobQueryResult<Sign_Student> result, BmobException e) {
                                             if(e ==null){
-                                                List<Sign_Student> list = (List<Sign_Student>) result.getResults();
+                                                final List<Sign_Student> list = (List<Sign_Student>) result.getResults();
                                                 if(list!=null && list.size()>0){
                                                     sign_student.setIsSign(1);
-                                                    sign_student.update(list.get(0).getObjectId(), new UpdateListener() {
-                                                        @Override
-                                                        public void done(BmobException e) {
-                                                            if (e == null) {
-                                                                Message message = new Message();
-                                                                message.obj = "签到成功";
-                                                                message.what = 17;
-                                                                handler.sendMessage(message);
-                                                                Log.d("测试", "插入成功" + user.getObjectId());
-                                                            } else {
-                                                                Message message = new Message();
-                                                                message.obj = "签到失败";
-                                                                message.what = 16;
-                                                                handler.sendMessage(message);
-                                                                Log.d("测试", "插入失败" + user.getObjectId());
+                                                    System.out.println("list.get(0).getObjectId()" + list.get(0).getObjectId());
+
+                                                    // 判断学生签到经纬度是否在允许的范围内
+                                                    if( address_teacher.distanceInKilometersTo(address_student) < 1 ){
+                                                        sign_student.update(list.get(0).getObjectId(), new UpdateListener() {
+                                                            @Override
+                                                            public void done(BmobException e) {
+                                                                if (e == null) {
+                                                                    Message message = new Message();
+                                                                    message.obj = "签到成功";
+                                                                    message.what = 17;
+                                                                    handler.sendMessage(message);
+                                                                    Log.d("测试", "插入成功" + user.getObjectId());
+                                                                } else {
+                                                                    Message message = new Message();
+                                                                    message.obj = "签到成功";
+                                                                    message.what = 17;
+                                                                    handler.sendMessage(message);
+                                                                    Log.d("测试", "插入成功" + user.getObjectId());
+//                                                                Message message = new Message();
+//                                                                message.obj = "签到失败";
+//                                                                message.what = 16;
+//                                                                handler.sendMessage(message);
+//                                                                Log.d("测试", "插入失败" + user.getObjectId());
+                                                                }
                                                             }
-                                                        }
-                                                    });
+                                                        });
+                                                    }
                                                 }else{
                                                     System.out.println("aaaaaaaaaa");
                                                 }
@@ -346,6 +367,12 @@ public class StudentPresenter {
                         Log.i("smile", "查询成功，无数据返回");
                     }
                 }else{
+                    Message message = new Message();
+                    message.obj = "签到失败";
+                    message.what = 15;
+                    handler.sendMessage(message);
+                    System.out.println("签到口令有误");
+
                     Log.i("smile", "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
                 }
             }

@@ -38,6 +38,7 @@ import android.widget.RelativeLayout;
 import com.google.zxing.Result;
 
 import term.rjb.x2l.lessoncheck.R;
+import term.rjb.x2l.lessoncheck.activity.UniversalStudentCheckActivity;
 import term.rjb.x2l.lessoncheck.zxing.camera.CameraManager;
 import term.rjb.x2l.lessoncheck.zxing.decode.DecodeThread;
 import term.rjb.x2l.lessoncheck.zxing.utils.BeepManager;
@@ -192,7 +193,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 		bundle.putInt("height", mCropRect.height());
 		bundle.putString("result", rawResult.getText());
 
+		String classNum1= getIntent().getStringExtra("classNum");
+		bundle.putString("classNum", classNum1);
+		System.out.println("classNum -- cap" + classNum1);
+
 		startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));
+
 	}
 
 	private void initCamera(SurfaceHolder surfaceHolder) {

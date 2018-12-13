@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
             String name="";
             switch (msg.what) {
                 case 0:
-
+                    Toast.makeText(LoginActivity.this,"登录失败，账号或者密码错误",Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
 

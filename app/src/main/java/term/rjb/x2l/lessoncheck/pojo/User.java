@@ -1,6 +1,7 @@
 package term.rjb.x2l.lessoncheck.pojo;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobGeoPoint;
 
 public class User extends BmobUser {
     private int id;
@@ -10,6 +11,15 @@ public class User extends BmobUser {
     private int secretId;
     private int isTeacher;
     private String secretAnswer;
+    private BmobGeoPoint address;
+
+    public void setAddress(BmobGeoPoint address) {
+        this.address = address;
+    }
+
+    public BmobGeoPoint getAddress() {
+        return address;
+    }
 
     public int getId() {
         return id;

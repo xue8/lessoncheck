@@ -24,6 +24,7 @@ public class StudentCheckActivity extends AppCompatActivity {
     private Toolbar toolBar;
     private Button check;
     private EditText key;
+    String classNum;
 
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
@@ -51,6 +52,10 @@ public class StudentCheckActivity extends AppCompatActivity {
         ActivityManager.getAppManager().addActivity(StudentCheckActivity.this);
         toolBar = this.findViewById(R.id.toolbar);
         toolBar.setTitle("口令签到");
+
+        Intent intent=getIntent();
+        classNum =intent.getStringExtra("classNum");
+
         setSupportActionBar(toolBar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -74,7 +79,7 @@ public class StudentCheckActivity extends AppCompatActivity {
     void check()
     {
         StudentPresenter studentPresenter = new StudentPresenter();
-        studentPresenter.setSignBySignNumber(key.getText().toString().trim(), handler);
+        studentPresenter.setSignBySignNumber(key.getText().toString().trim(),classNum, handler);
 
         //key.getText().toString().trim(); 签到口令
     }

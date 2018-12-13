@@ -1,6 +1,7 @@
 package term.rjb.x2l.lessoncheck.zxing.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -62,6 +63,8 @@ public class ResultActivity extends Activity {
 			int width = extras.getInt("width");
 			int height = extras.getInt("height");
 
+			String classNum =extras.getString("classNum");
+
 			LayoutParams lps = new LayoutParams(width, height);
 			lps.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
 			lps.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
@@ -72,9 +75,11 @@ public class ResultActivity extends Activity {
 			String result = extras.getString("result");
 //			mResultText.setText(result);
 
+			System.out.println("classNum -- res" + classNum);
+
 			// 扫到的结果mResultText
 			StudentPresenter studentPresenter = new StudentPresenter();
-			studentPresenter.setSignBySignNumber(result, handler);
+			studentPresenter.setSignBySignNumber(result, classNum,handler);
 
 			Bitmap barcode = null;
 			byte[] compressedBitmap = extras.getByteArray(DecodeThread.BARCODE_BITMAP);

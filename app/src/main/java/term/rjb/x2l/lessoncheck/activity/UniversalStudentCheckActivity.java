@@ -150,6 +150,10 @@ public class UniversalStudentCheckActivity extends AppCompatActivity {
                 break;
             case R.id.action1:
                 Intent intent=new Intent(UniversalStudentCheckActivity.this,StudentCheckActivity.class);
+
+                String classNum= getIntent().getStringExtra("classNum");
+                intent.putExtra("classNum", classNum);
+
                 startActivity(intent);
                 break;
             case R.id.action2:
@@ -159,6 +163,10 @@ public class UniversalStudentCheckActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(UniversalStudentCheckActivity.this, new String[]{Manifest.permission.CAMERA}, 1);
                 } else {
                     Intent intent1 = new Intent(UniversalStudentCheckActivity.this, CaptureActivity.class);
+
+                    String classNum1= getIntent().getStringExtra("classNum");
+                    intent1.putExtra("classNum", classNum1);
+
                     startActivity(intent1);
                 }
 
