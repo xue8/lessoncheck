@@ -53,7 +53,7 @@ class CheckMessage{
     public CheckMessage(String time,Integer i)
     {
         this.time=time;
-        isDone=(i==0)?"到课":"缺勤";
+        isDone=(i==1)?"到课":"缺勤";
     }
 }
 
@@ -148,9 +148,9 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action1:
-               // Intent intent=new Intent(TeacherClassActivity.this,CreateClassActivity.class);
-               // intent.putExtra("classNumber",classNum);
-               // startActivity(intent);
+                Intent intent=new Intent(TeacherClassActivity.this,CreateClassActivity.class);
+                intent.putExtra("classNumber",classNum);
+                startActivity(intent);
                 Toast.makeText(TeacherClassActivity.this, "进入发布签到页面", Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:

@@ -5,15 +5,15 @@ import java.lang.ref.PhantomReference;
 import cn.bmob.v3.BmobObject;
 
 public class Lesson_Student extends BmobObject {
-    private String lessonObjectId;
+    private String lessonNumber;
     private User student;
 
-    public String getLessonObjectId() {
-        return lessonObjectId;
+    public String getLessonNumber() {
+        return lessonNumber;
     }
 
-    public void setLessonObjectId(String lessonObjectId) {
-        this.lessonObjectId = lessonObjectId;
+    public void setLessonNumber(String lessonNumber) {
+        this.lessonNumber = lessonNumber;
     }
 
     public User getStudent() {

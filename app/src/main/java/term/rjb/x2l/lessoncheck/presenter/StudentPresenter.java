@@ -2,17 +2,13 @@ package term.rjb.x2l.lessoncheck.presenter;
 
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.w3c.dom.Comment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,9 +22,6 @@ import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SQLQueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
-import io.reactivex.disposables.Disposable;
-import term.rjb.x2l.lessoncheck.activity.LoginActivity;
-import term.rjb.x2l.lessoncheck.activity.StudentMainActivity;
 import term.rjb.x2l.lessoncheck.pojo.Lesson;
 import term.rjb.x2l.lessoncheck.pojo.Lesson_Sign;
 import term.rjb.x2l.lessoncheck.pojo.Lesson_Student;
@@ -144,7 +137,7 @@ public class StudentPresenter {
         handler = h;
         User user = BmobUser.getCurrentUser(User.class);
         lesson_student.setStudent(user);
-        lesson_student.setLessonObjectId(lessonId);
+        lesson_student.setLessonNumber(lessonId);
 
         String bql ="select * from Lesson where objectId = '" + lessonId + "'";
         new BmobQuery<Lesson>().doSQLQuery(bql,new SQLQueryListener<Lesson>(){

@@ -8,6 +8,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -32,10 +33,14 @@ public class TeacherPresenter {
     private int studentNum;
     private int num1;
     private String objectId1;
+    private User student;
     public TeacherPresenter(View view){
         this.view = view;
     }
 
+    /*
+        获得教师所有的课堂
+     */
     public void getAllClassByTeacherNumber(final Handler handler) {
         BmobQuery<Lesson> bmobQuery = new BmobQuery<>();
         final User user = BmobUser.getCurrentUser(User.class);
@@ -54,6 +59,10 @@ public class TeacherPresenter {
                 }
             });
     }
+
+    /*
+        创建课堂
+     */
 
     public void createClass(Lesson c, final Handler handler) {
         c.save(new SaveListener<String>() {
@@ -295,6 +304,58 @@ public class TeacherPresenter {
                  }
              }
          });
+    }
+
+    public void getAllSignMessageByStudentNumber(String lessonNumber, final String studentNum, final Handler handler){
+
+        BmobQuery<User> bmobQuery2 = new BmobQuery<>();
+        bmobQuery2.addWhereEqualTo("Number",studentNum);
+        Log.d("测试","studentNum"+studentNum);
+        bmobQuery2.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+                student = list.get(0);
+            }
+        });
+        final BmobQuery<Lesson_Sign> bmobQuery = new BmobQuery<>();
+        bmobQuery.addWhereEqualTo("lessonNumber",lessonNumber);
+        bmobQuery.findObjects(new FindListener<Lesson_Sign>() {
+            @Override
+            public void done(List<Lesson_Sign> list, BmobException e) {
+                Log.d("测试","lesson_sign size"+list.size());
+                if(e==null){
+                    BmobQuery<Sign_Student> bmobQuery1;
+                    BmobQuery<Sign_Student> bmobQuery3;
+                    List<BmobQuery<Sign_Student>> queries = new ArrayList<>();
+                    List<BmobQuery<Sign_Student>> queries1 = new ArrayList<>();
+                    for(Lesson_Sign lesson_sign : list){
+                        bmobQuery1  = new BmobQuery<>();
+                        bmobQuery1.addWhereEqualTo("student",student);
+                        bmobQuery3 = new BmobQuery<>();
+                        bmobQuery3.addWhereEqualTo("signNumber",lesson_sign.getSignNumber());
+                        BmobQuery<Sign_Student> bmobQuery4 = new BmobQuery<>();
+                        queries1.add(bmobQuery1);
+                        queries1.add(bmobQuery3);
+                        bmobQuery4.and(queries1);
+                        queries.add(bmobQuery4);
+                    }
+                    Log.d("测试","queries size"+queries.size());
+                    BmobQuery<Sign_Student> mainQuery = new BmobQuery<>();
+                    mainQuery.or(queries);
+                    mainQuery.findObjects(new FindListener<Sign_Student>() {
+                        @Override
+                        public void done(List<Sign_Student> list, BmobException e) {
+                            Message message = new Message();
+                            message.what = 6;
+                            message.obj = list;
+                            handler.sendMessage(message) ;
+
+                            Log.d("测试","sign_student size"+list.size());
+                        }
+                    });
+                }
+            }
+        });
     }
 }
 

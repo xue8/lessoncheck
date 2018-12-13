@@ -2,13 +2,11 @@ package term.rjb.x2l.lessoncheck.presenter;
 
 import android.os.Handler;
 import android.os.Message;
-import android.widget.Toast;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import term.rjb.x2l.lessoncheck.activity.LoginActivity;
-import term.rjb.x2l.lessoncheck.pojo.Student;
 import term.rjb.x2l.lessoncheck.pojo.User;
 
 public class LoginPresenter {

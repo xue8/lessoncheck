@@ -6,8 +6,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -32,21 +31,25 @@ public class LoginActivity extends AppCompatActivity {
 
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
+            Intent intent;
+            String name="";
             switch (msg.what) {
                 case 0:
 
                     break;
                 case 1:
-                    StudentPresenter studentPresenter = new StudentPresenter();
-                    studentPresenter.setSignBySignNumber("1",handler);
-                    //TODO 前端->学生窗口跳转
+
+                    intent=new Intent(LoginActivity.this,StudentMainActivity.class);
+                    intent.putExtra("user",username);
+                    intent.putExtra("name",name);
+                    intent.putExtra("isTeacher",1);
+                    startActivity(intent);
+                    ActivityManager.getAppManager().finishActivity(LoginActivity.this);
+
                     break;
                 case 2:
-                    //TODO 后端->查询数据库,返回名字
 
-                    String name="";
-
-                    Intent intent=new Intent(LoginActivity.this,TeacherMainActivity.class);
+                    intent=new Intent(LoginActivity.this,TeacherMainActivity.class);
                     intent.putExtra("user",username);
                     intent.putExtra("name",name);
                     intent.putExtra("isTeacher",1);
@@ -86,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action1:
-                //TODO 前端->忘记密码跳转(预选项)
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -102,8 +104,6 @@ public class LoginActivity extends AppCompatActivity {
                     username=user.getText().toString().trim();//账户
                     String passwords=password.getText().toString().trim();//密码
                     int susscesRegister=0;//注册是否成功
-                    //TODO 后端->查询数据库,返回职业,0不存在,1学生,2老师
-<<<<<<< HEAD
                     loginPresenter.login(username,passwords, handler);
 //                    switch (susscesRegister)
 //                    {
@@ -111,10 +111,8 @@ public class LoginActivity extends AppCompatActivity {
 //
 //                            break;
 //                        case 1:
-//                            //TODO 前端->学生窗口跳转
 //                            break;
 //                        case 2:
-//                            //TODO 后端->查询数据库,返回名字
 //
 //                            String name="";
 //
@@ -126,38 +124,35 @@ public class LoginActivity extends AppCompatActivity {
 //                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
 //                            break;
 //                    }
-=======
-                    susscesRegister = loginPresenter.login(username,passwords);
+                    loginPresenter.login(username,passwords, handler);
 
                     String name="";
                     Intent intent;
-                    //TODO 后端->查询数据库,返回名字
                     //name
-                    switch (susscesRegister)
-                    {
-                        case 0:
-
-                            break;
-                        case 1:
-                             intent=new Intent(LoginActivity.this,StudentMainActivity.class);
-                            intent.putExtra("user",username);
-                            intent.putExtra("name",name);
-                            intent.putExtra("isTeacher",0);
-                            startActivity(intent);
-                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
-                            break;
-                        case 2:
-                             intent=new Intent(LoginActivity.this,TeacherMainActivity.class);
-                            intent.putExtra("user",username);
-                            intent.putExtra("name",name);
-                            intent.putExtra("isTeacher",1);
-                            startActivity(intent);
-                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
-                            break;
-                            default:
-                                break;
-                    }
->>>>>>> temp
+//                    switch (susscesRegister)
+//                    {
+//                        case 0:
+//
+//                            break;
+//                        case 1:
+//                             intent=new Intent(LoginActivity.this,StudentMainActivity.class);
+//                            intent.putExtra("user",username);
+//                            intent.putExtra("name",name);
+//                            intent.putExtra("isTeacher",0);
+//                            startActivity(intent);
+//                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
+//                            break;
+//                        case 2:
+//                             intent=new Intent(LoginActivity.this,TeacherMainActivity.class);
+//                            intent.putExtra("user",username);
+//                            intent.putExtra("name",name);
+//                            intent.putExtra("isTeacher",1);
+//                            startActivity(intent);
+//                            ActivityManager.getAppManager().finishActivity(LoginActivity.this);
+//                            break;
+//                            default:
+//                                break;
+//                    }
                     break;
                 case R.id.btn_rigister:
                     intent =new Intent(LoginActivity.this, RegisterActivity.class);
