@@ -21,12 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         />
-
-
-
-
-
-
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="300dp"
         android:layout_height="40dp"
@@ -38,7 +32,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="20sp"
-            android:text="限制时间"
+            android:text="@string/create_check_limitTime"
             />
         <TextView
             android:layout_width="100dp"
@@ -69,7 +63,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="20sp"
-            android:text="当前位置"
+            android:text="@string/create_check_local"
             />
         <android.support.design.widget.TextInputEditText
             android:id="@+id/et_name"
@@ -104,7 +98,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="20sp"
-            android:hint="系统会生成随机口令"
+            android:hint="@string/create_check_hint"
             />
     </android.support.v7.widget.LinearLayoutCompat>
 

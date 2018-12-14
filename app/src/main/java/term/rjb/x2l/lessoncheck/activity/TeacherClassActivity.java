@@ -27,6 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -99,10 +100,11 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
                           rightNow.setTime(createdAt);
                           rightNow.add(Calendar.MINUTE, lesson_sign.getLastMinute());
                           if( nowDate.before(rightNow.getTime()) ) {
-                              checkMessageList.add(new CheckMessage(lesson_sign.getCreatedAt().substring(0, lesson_sign.getCreatedAt().indexOf(" ")), lesson_sign.getSignNumber(),0 ));
+                              checkMessageList.add(new CheckMessage(lesson_sign.getCreatedAt(), lesson_sign.getSignNumber(),0 ));
                           }else{
-                              checkMessageList.add(new CheckMessage(lesson_sign.getCreatedAt().substring(0, lesson_sign.getCreatedAt().indexOf(" ")), lesson_sign.getSignNumber(),1 ));
+                              checkMessageList.add(new CheckMessage(lesson_sign.getCreatedAt(), lesson_sign.getSignNumber(),1 ));
                           }
+                          Collections.reverse(checkMessageList);
                       }
                   }
                   initCheckMessage();
@@ -260,7 +262,6 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
         //样例 添加一个新的记录对象到前端写的链表checkMessageList中
          //checkMessageList.add(new CheckMessage("2018-12-11",0)); 注意 1代表进行中,0代表 结束
         //end
-
 
         final ArrayAdapter<CheckMessage> adapter1 = new ArrayAdapter<CheckMessage>(TeacherClassActivity.this,
                 R.layout.class_check_message,checkMessageList){

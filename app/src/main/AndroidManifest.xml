@@ -52,7 +52,6 @@
         <activity android:name=".activity.TeacherClassActivity" />
         <activity android:name=".activity.CreateClassActivity" />
         <activity android:name=".activity.StudentMainActivity" />
-        <activity android:name=".activity.TeacherActivity" />
         <activity android:name=".activity.UniversalStudentCheckActivity" />
         <activity android:name=".activity.CheckAllStudentActivity" />
         <activity android:name=".activity.CreateCheckActivity" />

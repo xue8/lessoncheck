@@ -52,7 +52,7 @@ public class LoginPresenter {
             @Override
             public void done(User bmobStudent, BmobException e) {
                 if(e==null){
-                    User user1 = BmobUser.getCurrentUser(User.class);
+                    final User user1 = BmobUser.getCurrentUser(User.class);
                     int LOCATION_CODE = 39;
                     if(user1.getIsTeacher() == 0){
                         // 更新用户坐标
@@ -84,6 +84,7 @@ public class LoginPresenter {
                                 public void done(BmobException e) {
                                     if (e == null) {
                                         Message message = new Message();
+                                        message.obj = user1.getName();
                                         message.what = 1;
                                         handler.sendMessage(message);
                                         Log.e("BMOB", "更新成功：" + user.getAddress().getLatitude());
@@ -98,6 +99,7 @@ public class LoginPresenter {
 
                     }else{
                         Message message = new Message();
+                        message.obj = user1.getName();
                         message.what = 2;
                         handler.sendMessage(message);
                     }

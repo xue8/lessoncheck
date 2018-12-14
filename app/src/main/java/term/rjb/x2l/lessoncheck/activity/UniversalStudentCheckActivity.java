@@ -55,7 +55,7 @@ public class UniversalStudentCheckActivity extends AppCompatActivity implements 
                     studentMessageList.clear();
                     for (int i = 0; i <sign_students.size(); i++){
                         System.out.println("---------" + sign_students.get(i).getIsSign());
-                        studentMessageList.add(new CheckMessage(sign_students.get(i).getCreatedAt().substring(0, sign_students.get(i).getCreatedAt().indexOf(" ")),sign_students.get(i).getIsSign()));//1到课 0缺勤
+                        studentMessageList.add(new CheckMessage( sign_students.get(i).getCreatedAt(), sign_students.get(i).getIsSign()));
                     }
                     Collections.reverse(studentMessageList);
 //                    if(sign_students.size()>0){

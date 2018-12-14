@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this,"登录失败，账号或者密码错误",Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
-
+                    name = (String) msg.obj;
                     intent=new Intent(LoginActivity.this,StudentMainActivity.class);
                     intent.putExtra("user",username);
                     intent.putExtra("name",name);
@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     break;
                 case 2:
-
+                    name = (String) msg.obj;
                     intent=new Intent(LoginActivity.this,TeacherMainActivity.class);
                     intent.putExtra("user",username);
                     intent.putExtra("name",name);

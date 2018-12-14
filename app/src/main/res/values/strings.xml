@@ -17,4 +17,17 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ`¬!"£$%^*()~=#{}[];':,./?/*-_+&#060;&#062;&#064;&#03
     <string name="register_hint_necessary">必填</string>
     <string name="register_label_student">我是学生</string>
     <string name="register_label_teacher">我是教师</string>
+	<string name="add_class_classNumber">课堂代码</string>
+	<string name="add_class_class">加入课堂</string>
+	<string name="add_class_classNumber_hint">7位英文字符 区分大小写</string>
+	<string name="create_check_limitTime">限制时间</string>
+	<string name="create_check_local">当前位置</string>
+	<string name="create_check_hint">系统会生成随机口令</string>
+	<string name="create_class_className">课堂名称：</string>
+	<string name="create_class_classNum">课程代码：</string>
+	<string name="create_class_hint">7位英文字符 区分大小写</string>
+	<string name="create_class_add">添加课堂</string>
+	<string name="student_check_key">签到口令：</string>
+	<string name="student_check_btn">签到</string>
+	<string name="student_check_hint">6个英文字符</string>
 </resources>
