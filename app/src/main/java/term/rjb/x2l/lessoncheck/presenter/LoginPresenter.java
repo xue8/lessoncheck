@@ -62,6 +62,38 @@ public class LoginPresenter {
                             //请求权限
                             ActivityCompat.requestPermissions(loginActivity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                                     Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_CODE);
+                            address = gpsUtils.getLocation(loginActivity);
+                            String [] address1 = address.split(",");
+
+                            double d = Double.parseDouble(address1[0]);
+                            BigDecimal b = new BigDecimal(d);
+                            d = b.setScale(5, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+                            double d1 = Double.parseDouble(address1[1]);
+                            BigDecimal b1 = new BigDecimal(d1);
+                            d1 = b1.setScale(5, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+
+                            Double x = d1;
+                            Double y = d;
+                            BmobGeoPoint bmobGeoPoint = new BmobGeoPoint(x,y);
+                            user1.setAddress(bmobGeoPoint);
+                            user1.update(new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null) {
+                                        Message message = new Message();
+                                        message.obj = user1.getName();
+                                        message.what = 1;
+                                        handler.sendMessage(message);
+                                        Log.e("BMOB", "更新成功：" + user.getAddress().getLatitude());
+//                                    Snackbar.make(mBtnUpdateLocation, "更新成功：" + user.getAddress().getLatitude() + "-" + user.getAddress().getLongitude(), Snackbar.LENGTH_LONG).show();
+                                    } else {
+                                        Log.e("BMOB", e.toString());
+//                                    Snackbar.make(mBtnUpdateLocation, e.getMessage(), Snackbar.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
                         } else {
                             address = gpsUtils.getLocation(loginActivity);
                             String [] address1 = address.split(",");

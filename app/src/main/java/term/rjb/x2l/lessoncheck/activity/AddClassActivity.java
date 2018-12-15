@@ -129,7 +129,7 @@ public class AddClassActivity extends AppCompatActivity {
 
                 int destLen = dest.toString().getBytes("GB18030").length;
                 int sourceLen = source.toString().getBytes("GB18030").length;
-                if (destLen + sourceLen > 16) {
+                if (destLen + sourceLen > 7) {
                     Toast.makeText(AddClassActivity.this,"最多可以输入7个英文或数字",Toast.LENGTH_SHORT).show();
                     return "";
                 }

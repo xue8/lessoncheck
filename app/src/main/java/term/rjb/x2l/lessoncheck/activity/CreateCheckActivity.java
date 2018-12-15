@@ -51,10 +51,19 @@ public class CreateCheckActivity extends AppCompatActivity implements term.rjb.x
     private Handler handler = new Handler(){
       public void handleMessage(Message message){
           switch (message.what){
-              case 0: flag1 = (int)message.obj; break;
-              case 1: flag2 = (int)message.obj;
+              case 0: flag1 = (int)message.obj;           if (flag1==1&&flag2==1)
+              {        String path = Environment.getExternalStorageDirectory().getPath() + "/DCIM/" + "/qr_code" + codeStr + ".png";
+                  Bitmap bitmap = QRCodeUtil.createQRImage(codeStr, 1000, 1000, null, path);
+                  Toast.makeText(CreateCheckActivity.this, "二维码生成成功，已保存在您的相册！", Toast.LENGTH_SHORT).show();
+                  ActivityManager.getAppManager().finishActivity(CreateCheckActivity.this);
+              }break;
+              case 1: flag2 = (int)message.obj;           if (flag1==1&&flag2==1)
+              {        String path = Environment.getExternalStorageDirectory().getPath() + "/DCIM/" + "/qr_code" + codeStr + ".png";
+                  Bitmap bitmap = QRCodeUtil.createQRImage(codeStr, 1000, 1000, null, path);
+                  Toast.makeText(CreateCheckActivity.this, "二维码生成成功，已保存在您的相册！", Toast.LENGTH_SHORT).show();
+                  ActivityManager.getAppManager().finishActivity(CreateCheckActivity.this);
+              }break;
           }
-
       }
     };
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -67,30 +76,29 @@ public class CreateCheckActivity extends AppCompatActivity implements term.rjb.x
                     break;
                 case R.id.btn_create:
                     createCheck();
-                    ActivityManager.getAppManager().finishActivity(CreateCheckActivity.this);
                     break;
             }
-            if(flag1 == 1 && flag2 == 1) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(CreateCheckActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        //没有权限则申请权限
-                        ActivityCompat.requestPermissions(CreateCheckActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                    } else {
-                        //有权限直接执行,docode()不用做处理
-                        String path = Environment.getExternalStorageDirectory().getPath() + "/DCIM/" + "/qr_code" + codeStr + ".png";
-                        Bitmap bitmap = QRCodeUtil.createQRImage(codeStr, 300, 300, null, path);
-                        Toast.makeText(CreateCheckActivity.this, "二维码生成成功，已保存在您的相册！", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    //小于6.0，不用申请权限，直接执行
-                    String path = Environment.getExternalStorageDirectory().getPath()+"/DCIM/" + "/qr_code" + codeStr + ".png";
-                    Bitmap bitmap = QRCodeUtil.createQRImage(codeStr, 300, 300, null, path);
-                    Toast.makeText(CreateCheckActivity.this,"二维码生成成功，已保存在您的相册！",Toast.LENGTH_SHORT).show();
-
-
-
-                }
-            }
+//            if(flag1 == 1 && flag2 == 1) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                    if (ContextCompat.checkSelfPermission(CreateCheckActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                        //没有权限则申请权限
+//                        ActivityCompat.requestPermissions(CreateCheckActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+//                    } else {
+//                        //有权限直接执行,docode()不用做处理
+//                        String path = Environment.getExternalStorageDirectory().getPath() + "/DCIM/" + "/qr_code" + codeStr + ".png";
+//                        Bitmap bitmap = QRCodeUtil.createQRImage(codeStr, 300, 300, null, path);
+//                        Toast.makeText(CreateCheckActivity.this, "二维码生成成功，已保存在您的相册！", Toast.LENGTH_SHORT).show();
+//                    }
+//                } else {
+//                    //小于6.0，不用申请权限，直接执行
+//                    String path = Environment.getExternalStorageDirectory().getPath()+"/DCIM/" + "/qr_code" + codeStr + ".png";
+//                    Bitmap bitmap = QRCodeUtil.createQRImage(codeStr, 300, 300, null, path);
+//                    Toast.makeText(CreateCheckActivity.this,"二维码生成成功，已保存在您的相册！",Toast.LENGTH_SHORT).show();
+//
+//
+//
+//                }
+//            }
         }
     };
     @Override
@@ -110,6 +118,15 @@ public class CreateCheckActivity extends AppCompatActivity implements term.rjb.x
         create.setOnClickListener(onClickListener);
         getLocal.setOnClickListener(onClickListener);
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(CreateCheckActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                //没有权限则申请权限
+                ActivityCompat.requestPermissions(CreateCheckActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else {
+                //有权限直接执行,docode()不用做处理
+            }
+        }
     }
 
 

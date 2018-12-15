@@ -61,7 +61,7 @@ public class TeacherMainActivity extends AppCompatActivity implements term.rjb.x
                         @Override
                         public void onItemClick(String id) {
                             //TODO 前端->进入课堂详情页面
-                            Toast.makeText(TeacherMainActivity.this, "进入课号" + id, Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(TeacherMainActivity.this, "进入课号" + id, Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(TeacherMainActivity.this, TeacherClassActivity.class);
                             // Intent intent=new Intent(RegisterActivity.this,StudentMainActivity.class);
                             intent.putExtra("classNumber", id);

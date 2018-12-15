@@ -85,6 +85,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
       public void handleMessage(Message message){
           switch (message.what){
               case 0:
+                  checkMessageList.clear();
                   List<Lesson_Sign> lesson_signs = (List<Lesson_Sign>) message.obj;
                   if(lesson_signs.size()>0) {
                       for (Lesson_Sign lesson_sign : lesson_signs) {
@@ -110,6 +111,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
                   initCheckMessage();
                   break;
               case 1:
+                  studentMessageList.clear();
                   List<Lesson_Student> lesson_students = (List<Lesson_Student>)message.obj;
                   if(lesson_students.size()>0){
                       for(Lesson_Student lesson_student : lesson_students){
@@ -117,7 +119,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
                          Log.d("测试","学号和姓名"+lesson_student.getStudent().getNumber()+lesson_student.getStudent().getName()+lesson_student.getLessonNumber());
                       }
                   }
-                  initStudnetMessage();
+                  initStudentMessage();
                   break;
           }
       }
@@ -137,6 +139,13 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initCheckMessage();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = this.getMenuInflater();
@@ -151,7 +160,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
                 Intent intent=new Intent(TeacherClassActivity.this,CreateCheckActivity.class);
                 intent.putExtra("classNumber",classNum);
                 startActivity(intent);
-                Toast.makeText(TeacherClassActivity.this, "进入发布签到页面", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(TeacherClassActivity.this, "进入发布签到页面", Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:
                 ActivityManager.getAppManager().finishActivity(TeacherClassActivity.this);
@@ -160,6 +169,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
                 return super.onOptionsItemSelected(item);
         }
     }
+
     private void init()
     {
         mViewPager = findViewById(R.id.viewpager);
@@ -173,8 +183,6 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
         mViewList.add(studentsView);
         teacherPresenter = new TeacherPresenter(this);
         //获取签到记录
-        teacherPresenter.getSignByLesson(classNum,handler);
-        teacherPresenter.getAllLessonStudents(classNum,handler);
         mTitleList.add("课堂签到记录");
         mTitleList.add("我的学生");
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);//设置tab模式，当前为系统默认模式
@@ -199,7 +207,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
                         initCheckMessage();
                         break;
                     case  1:
-                        initStudnetMessage();
+                        initStudentMessage();
                         break;
                 }
             }
@@ -208,6 +216,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
 
     }
     });
+        initCheckMessage();
     }
 
     @Override
@@ -215,7 +224,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
 
     }
 
-
+    //适配器借鉴简书
     class MyPagerAdapter extends PagerAdapter {
         private List<View> mViewList;
 
@@ -262,7 +271,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
         //样例 添加一个新的记录对象到前端写的链表checkMessageList中
          //checkMessageList.add(new CheckMessage("2018-12-11",0)); 注意 1代表进行中,0代表 结束
         //end
-
+        teacherPresenter.getSignByLesson(classNum,handler);
         final ArrayAdapter<CheckMessage> adapter1 = new ArrayAdapter<CheckMessage>(TeacherClassActivity.this,
                 R.layout.class_check_message,checkMessageList){
             @Override
@@ -285,9 +294,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Toast.makeText(TeacherClassActivity.this,
-                        "你选择了" + checkMessageList.get(i).id+"的签到记录",
-                        Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(TeacherClassActivity.this,"你选择了" + checkMessageList.get(i).id+"的签到记录",Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(TeacherClassActivity.this,CheckAllStudentActivity.class);
                 intent.putExtra("classNum",classNum);
                 intent.putExtra("checkID",checkMessageList.get(i).id);
@@ -297,7 +304,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
             }
         });
     }
-    void initStudnetMessage()
+    void initStudentMessage()
     {
         //TODO 后端->查询数据库里选了这个课的学生 包括学生用户名 名字
 
@@ -310,7 +317,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
         //studentMessageList.add(new StudentMessage("1600300924","luqi"));
         //end
 
-
+        teacherPresenter.getAllLessonStudents(classNum,handler);
         final ArrayAdapter<StudentMessage> adapter2 = new ArrayAdapter<StudentMessage>(TeacherClassActivity.this,
                 R.layout.class_student_message,studentMessageList){
             @Override
@@ -332,9 +339,7 @@ public class TeacherClassActivity extends AppCompatActivity implements term.rjb.
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Toast.makeText(TeacherClassActivity.this,
-                        "你选择了" + studentMessageList.get(i).number+"的签到信息",
-                        Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(TeacherClassActivity.this,"你选择了" + studentMessageList.get(i).number+"的签到信息",Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(TeacherClassActivity.this,UniversalStudentCheckActivity.class);
                 intent.putExtra("classNum",classNum);
                 intent.putExtra("studentNum",studentMessageList.get(i).number);

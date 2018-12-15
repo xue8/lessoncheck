@@ -62,7 +62,7 @@
             android:id="@+id/et_classNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/create_check_hint"
+            android:hint="@string/create_class_hint"
             android:digits="@string/rule_text"
             android:shadowColor="@color/baseColor"
             android:theme="@style/MyEditText"

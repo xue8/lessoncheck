@@ -64,7 +64,7 @@ public class StudentMainActivity extends AppCompatActivity {
                     myListAdapter.setItemClickListener(new MyListAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(String id) {
-                            Toast.makeText(StudentMainActivity.this, "进入课号" + id, Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(StudentMainActivity.this, "进入课号" + id, Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(StudentMainActivity.this, UniversalStudentCheckActivity.class);
                             intent.putExtra("classNum",id);
                             intent.putExtra("studentNum",username);
@@ -77,7 +77,7 @@ public class StudentMainActivity extends AppCompatActivity {
                             if (!deleteMode)
                                 return;
 
-                            Toast.makeText(StudentMainActivity.this, "退出课号" + id, Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(StudentMainActivity.this, "退出课号" + id, Toast.LENGTH_SHORT).show();
                             for (int i = 0; i < list.size(); i++) {
                                 if (list.get(i).getClassNumber().equals(id)) {
                                     //用到的数据

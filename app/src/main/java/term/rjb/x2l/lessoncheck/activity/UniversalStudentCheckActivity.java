@@ -89,7 +89,6 @@ public class UniversalStudentCheckActivity extends AppCompatActivity implements 
                     };
                     listView.setAdapter(adapter1);
                 case 20:
-                    studentMessageList.clear();
                     List<Sign_Student> list_l = (List<Sign_Student>)message.obj;
                     studentMessageList.clear();
                     for (int i = list_l.size()-1; i >= 0; i--){
@@ -166,6 +165,12 @@ public class UniversalStudentCheckActivity extends AppCompatActivity implements 
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        initList();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(who==1)
         return super.onCreateOptionsMenu(menu);
@@ -177,7 +182,7 @@ public class UniversalStudentCheckActivity extends AppCompatActivity implements 
         }
     }
 
-    //顶部后退按钮
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId() )
@@ -196,16 +201,14 @@ public class UniversalStudentCheckActivity extends AppCompatActivity implements 
             case R.id.action2:
 
                 // 扫二维码
-                if (ContextCompat.checkSelfPermission(UniversalStudentCheckActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(UniversalStudentCheckActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                     ActivityCompat.requestPermissions(UniversalStudentCheckActivity.this, new String[]{Manifest.permission.CAMERA}, 1);
-                } else {
-                    Intent intent1 = new Intent(UniversalStudentCheckActivity.this, CaptureActivity.class);
 
+                    Intent intent1 = new Intent(UniversalStudentCheckActivity.this, CaptureActivity.class);
                     String classNum1= getIntent().getStringExtra("classNum");
                     intent1.putExtra("classNum", classNum1);
-
                     startActivity(intent1);
-                }
+
 
                 break;
         }
@@ -290,4 +293,5 @@ public class UniversalStudentCheckActivity extends AppCompatActivity implements 
     public void getALLessons(List<Lesson> lessons) {
 
     }
+
 }
