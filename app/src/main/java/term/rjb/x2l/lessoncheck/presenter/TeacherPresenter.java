@@ -137,6 +137,38 @@ public class TeacherPresenter {
     public void deleteClass(String objectId) {
         Lesson c = new Lesson();
         c.setObjectId(objectId);
+        final BmobQuery<Lesson> bmobQuery = new BmobQuery<>();
+        bmobQuery.addWhereEqualTo("objectId",objectId);
+        bmobQuery.findObjects(new FindListener<Lesson>() {
+            @Override
+            public void done(List<Lesson> list, BmobException e) {
+                if(e == null){
+                    BmobQuery<Lesson_Student> bmobQuery1 = new BmobQuery<>();
+                    bmobQuery1.addWhereEqualTo("lessonNumber",list.get(0).getLessonNumber());
+                    bmobQuery1.findObjects(new FindListener<Lesson_Student>() {
+                        @Override
+                        public void done(List<Lesson_Student> list, BmobException e) {
+                            if(e == null){
+                                Lesson_Student lesson_student = new Lesson_Student();
+                                for(Lesson_Student lesson_student1 : list) {
+                                    lesson_student.setObjectId(lesson_student1.getObjectId());
+                                    lesson_student.delete(new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if(e == null){
+                                                Log.d("测试","删除课堂学生成功");
+                                            }else{
+                                                Log.d("测试","删除课堂学生失败");
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
         c.delete(new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -148,29 +180,29 @@ public class TeacherPresenter {
             }
         });
 
-        BmobQuery<Lesson_Student> bmobQuery = new BmobQuery<>();
-        bmobQuery.addQueryKeys("objectId");
-        bmobQuery.addWhereEqualTo("lessonObjectId", objectId);
-        bmobQuery.findObjects(new FindListener<Lesson_Student>() {
-            @Override
-            public void done(List<Lesson_Student> object, BmobException e) {
-                if (e == null) {
-                    for (Lesson_Student lesson_student : object) {
-                        lesson_student.delete(new UpdateListener() {
-
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    Log.d("测试", "课堂学生表删除成功");
-                                } else {
-                                    Log.d("测试", "课堂学生表删除失败");
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        });
+//        BmobQuery<Lesson_Student> bmobQuery = new BmobQuery<>();
+//        bmobQuery.addQueryKeys("objectId");
+//        bmobQuery.addWhereEqualTo("lessonNumber", objectId);
+//        bmobQuery.findObjects(new FindListener<Lesson_Student>() {
+//            @Override
+//            public void done(List<Lesson_Student> object, BmobException e) {
+//                if (e == null) {
+//                    for (Lesson_Student lesson_student : object) {
+//                        lesson_student.delete(new UpdateListener() {
+//
+//                            @Override
+//                            public void done(BmobException e) {
+//                                if (e == null) {
+//                                    Log.d("测试", "课堂学生表删除成功");
+//                                } else {
+//                                    Log.d("测试", "课堂学生表删除失败");
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//        });
     }
     /*
         获得某个课程里所有的学生
@@ -303,7 +335,7 @@ public class TeacherPresenter {
          });
     }
 
-    public void getAllSignMessageByStudentNumber(String lessonNumber, final String studentNum, final Handler handler){
+    public void getAllSignMessageByStudentNumber(final String lessonNumber, final String studentNum, final Handler handler){
 
         BmobQuery<User> bmobQuery2 = new BmobQuery<>();
         bmobQuery2.addWhereEqualTo("Number",studentNum);
@@ -313,85 +345,55 @@ public class TeacherPresenter {
             public void done(List<User> list, BmobException e) {
                 Log.d("测试","User size"+list.size());
                 student = list.get(0);
-            }
-        });
-        final BmobQuery<Lesson_Sign> bmobQuery = new BmobQuery<>();
-        bmobQuery.addWhereEqualTo("lessonNumber",lessonNumber);
-        bmobQuery.findObjects(new FindListener<Lesson_Sign>() {
-            @Override
-            public void done(List<Lesson_Sign> list, BmobException e) {
-                Log.d("测试","lesson_sign size"+list.size());
-                if(e==null){
-                    BmobQuery<Sign_Student> bmobQuery1;
-                    BmobQuery<Sign_Student> bmobQuery3;
-                    List<BmobQuery<Sign_Student>> queries = new ArrayList<>();
-                    bmobQuery1  = new BmobQuery<>();
-                    bmobQuery1.addWhereEqualTo("student",student);
-                    Log.d("测试","student number"+student.getNumber());
-                    List<String> list1 = new ArrayList<>();
-                    StringBuilder stringBuilder = new StringBuilder();
-                    for(Lesson_Sign lesson_sign : list){
-                        String str = "'"+lesson_sign.getSignNumber()+"'"+",";
-                        stringBuilder.append(str);
-                    }
-                    String bql = "select * from Sign_Student where student='"+student.getObjectId()+"' and signNumber in ("+ stringBuilder.substring(0,stringBuilder.lastIndexOf(","))+")";
-                    new BmobQuery<Sign_Student>().doSQLQuery(bql,new SQLQueryListener<Sign_Student>(){
-
-                        @Override
-                        public void done(BmobQueryResult<Sign_Student> result, BmobException e) {
-                            if(e ==null){
-                                List<Sign_Student> list = (List<Sign_Student>) result.getResults();
-                                if(list!=null && list.size()>0){
-                                    Message message = new Message();
-                                    message.what = 6;
-                                    message.obj = list;
-                                    handler.sendMessage(message) ;
-
-                                    Log.d("测试","sign_student size"+list.size());
-                                }else{
-                                    Log.i("smile", "查询成功，无数据返回");
-                                }
-                            }else{
-                                Log.i("smile", "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
+                final BmobQuery<Lesson_Sign> bmobQuery = new BmobQuery<>();
+                bmobQuery.addWhereEqualTo("lessonNumber",lessonNumber);
+                bmobQuery.findObjects(new FindListener<Lesson_Sign>() {
+                    @Override
+                    public void done(List<Lesson_Sign> list, BmobException e) {
+                        Log.d("测试","lesson_sign size"+list.size());
+                        if(e==null){
+                            BmobQuery<Sign_Student> bmobQuery1;
+                            BmobQuery<Sign_Student> bmobQuery3;
+                            List<BmobQuery<Sign_Student>> queries = new ArrayList<>();
+                            bmobQuery1  = new BmobQuery<>();
+                            bmobQuery1.addWhereEqualTo("student",student);
+                            Log.d("测试","student number"+student.getNumber());
+                            List<String> list1 = new ArrayList<>();
+                            StringBuilder stringBuilder = new StringBuilder();
+                            for(Lesson_Sign lesson_sign : list){
+                                String str = "'"+lesson_sign.getSignNumber()+"'"+",";
+                                stringBuilder.append(str);
                             }
+                            String bql = "select * from Sign_Student where student='"+student.getObjectId()+"' and signNumber in ("+ stringBuilder.substring(0,stringBuilder.lastIndexOf(","))+")";
+                            Log.d("测试","bql="+bql);
+                            new BmobQuery<Sign_Student>().doSQLQuery(bql,new SQLQueryListener<Sign_Student>(){
+
+                                @Override
+                                public void done(BmobQueryResult<Sign_Student> result, BmobException e) {
+                                    if(e ==null){
+                                        List<Sign_Student> list = (List<Sign_Student>) result.getResults();
+                                        if(list!=null && list.size()>0){
+                                            Message message = new Message();
+                                            message.what = 6;
+                                            message.obj = list;
+                                            handler.sendMessage(message) ;
+
+                                            Log.d("测试","sign_student size"+list.size());
+                                        }else{
+                                            Log.d("smile", "查询成功，无数据返回");
+                                        }
+                                    }else{
+                                        Log.d("smile", "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
+                                    }
+                                }
+                            });
+
                         }
-                    });
-//                    Log.d("测试","list1 contains"+list1.get(0));
-//                    Log.d("测试","list1 size"+list1.size());
-//                    bmobQuery3 = new BmobQuery<>();
-//                    bmobQuery3.addWhereContainsAll("signNumber",list1);
-//                    queries.add(bmobQuery1);
-//                    queries.add(bmobQuery3);
-
-//                    bmobQuery3.addWhereContainsAll("signNumber",list1);
-//                    queries.add(bmobQuery1);
-//                    queries.add(bmobQuery3);
-
-//                        bmobQuery3 = new BmobQuery<>();
-//                        bmobQuery3.addWhereEqualTo("signNumber",lesson_sign.getSignNumber());
-//                        BmobQuery<Sign_Student> bmobQuery4 = new BmobQuery<>();
-//                        queries1.add(bmobQuery1);
-//                        queries1.add(bmobQuery3);
-//                        bmobQuery4.and(queries1);
-//                        queries.add(bmobQuery4);
-//                    }
-//                    Log.d("测试","queries size"+queries.size());
-//                    BmobQuery<Sign_Student> mainQuery = new BmobQuery<>();
-//                    mainQuery.and(queries);
-//                    mainQuery.findObjects(new FindListener<Sign_Student>() {
-//                        @Override
-//                        public void done(List<Sign_Student> list, BmobException e) {
-//                            Message message = new Message();
-//                            message.what = 6;
-//                            message.obj = list;
-//                            handler.sendMessage(message) ;
-//
-//                            Log.d("测试","sign_student size"+list.size());
-//                        }
-//                    });
-                }
+                    }
+                });
             }
         });
+
     }
 }
 

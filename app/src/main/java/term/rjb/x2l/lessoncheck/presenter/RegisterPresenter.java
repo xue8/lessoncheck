@@ -34,10 +34,12 @@ public class RegisterPresenter {
                     Message message = new Message();
                     message.what = 0;
                     handler.sendMessage(message);
+                    System.out.println("存在" + message);
                 } else {
                     Message message = new Message();
                     message.what = 1;
                     handler.sendMessage(message);
+                    System.out.println("存在" + message);
                 }
             }
         });

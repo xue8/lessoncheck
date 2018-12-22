@@ -2,17 +2,13 @@ package term.rjb.x2l.lessoncheck.presenter;
 
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.w3c.dom.Comment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +16,6 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobGeoPoint;
-import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -28,9 +23,6 @@ import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SQLQueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
-import io.reactivex.disposables.Disposable;
-import term.rjb.x2l.lessoncheck.activity.LoginActivity;
-import term.rjb.x2l.lessoncheck.activity.StudentMainActivity;
 import term.rjb.x2l.lessoncheck.pojo.Lesson;
 import term.rjb.x2l.lessoncheck.pojo.Lesson_Sign;
 import term.rjb.x2l.lessoncheck.pojo.Lesson_Student;
@@ -389,6 +381,7 @@ public class StudentPresenter {
 
         BmobQuery query =new BmobQuery("Lesson_Sign");
         query.addWhereEqualTo("lessonNumber", lessonNumber);
+        Log.d("测试","lessonNumber test"+lessonNumber);
         query.setLimit(30);
         query.findObjectsByTable(new QueryListener<JSONArray>() {
             @Override
@@ -408,7 +401,11 @@ public class StudentPresenter {
                     System.out.println("sql + " + classSql);
                     String bql;
                     if( !classSql.equals("")){
-                       bql ="select * from Sign_Student where student='" + user.getObjectId() + "' and (" + classSql + ")";
+                        if( ary.length()> 1){
+                            bql ="select * from Sign_Student where student='" + user.getObjectId() + "' and (" + classSql + ")";
+                        }else{
+                            bql ="select * from Sign_Student where student='" + user.getObjectId() + "' and " + classSql + "";
+                        }
                     }else {
                         bql ="select * from Sign_Student where signNumber='2sdiashdusaiudhaiudhaiud'";
                     }
